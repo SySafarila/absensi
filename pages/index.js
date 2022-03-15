@@ -15,8 +15,8 @@ export default function Home() {
         ipsum.
       </p>
       {!user ? <button onClick={Auth.login}>Login</button> : ''}
-      <button onClick={Auth.logout}>Logout</button>
-      <button onClick={Auth.checkAuth}>Check Login</button>
+      {user ? <button onClick={Auth.logout}>Logout</button> : ''}
+      {/* <button onClick={Auth.checkAuth}>Check Login</button> */}
       <button onClick={() => console.log(user)}>User</button>
     </>
   );

@@ -26,7 +26,12 @@ const AuthController = () => {
             const token = credential.accessToken;
             const user = res.user;
 
-            setUser("ada");
+            setUser({
+              displayName: res.user.displayName,
+              email: res.user.email,
+              photoUrl: res.user.photoURL,
+              uid: res.user.uid,
+            });
           })
           .catch((error) => {
             // Handle Errors here.
@@ -46,12 +51,24 @@ const AuthController = () => {
 
   const checkAuth = async () => {
     // const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      setUser(user);
-    } else {
-      setUser(null);
-    }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        // ...
+        setUser({
+          displayName: user.displayName,
+          email: user.email,
+          photoUrl: user.photoURL,
+          uid: user.uid,
+        });
+      } else {
+        // User is signed out
+        // ...
+        setUser(null);
+      }
+    });
   };
 
   const logout = async () => {
