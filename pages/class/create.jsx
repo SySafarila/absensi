@@ -18,7 +18,11 @@ const CreateClass = () => {
       return alert("Please login");
     }
 
-    let dataX = { ...data, user_id: user?.uid };
+    let dataX = {
+      ...data,
+      user_id: user?.uid,
+      created_at: new Date().getTime(),
+    };
     console.log(dataX);
 
     try {
