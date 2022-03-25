@@ -58,7 +58,7 @@ const IndexClass = () => {
         nemo corporis velit quis? Quidem debitis, laborum ratione ducimus
         impedit quas?
       </p>
-      <Link href="/class/create">Move</Link>
+      <Link href="/classes/create">Move</Link>
       {classes.map((doc) => (
         <div key={doc.uid} style={{ borderBottom: "1px solid black" }}>
           <p>uid : {doc.uid}</p>
@@ -66,7 +66,7 @@ const IndexClass = () => {
           <p>course : {doc.course}</p>
           <p>university : {doc.university}</p>
           <p>semester : {doc.semester}</p>
-          <Link href={`/class/${doc.uid}`}>
+          <Link href={`/classes/${doc.uid}`}>
               <a className="asd">Go</a>
           </Link>
         </div>

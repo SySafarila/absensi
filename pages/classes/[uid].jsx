@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -25,6 +26,12 @@ const ShowClass = () => {
       console.log(uid);
       getClass();
     }
+
+    return () => {
+      setClassX(null);
+      setIsAdmin(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
 
   const getClass = async () => {
@@ -36,7 +43,8 @@ const ShowClass = () => {
       setClassX(docSnap.data());
       getClassAdmins();
     } else {
-      console.warn("404");
+      console.warn("404 Class not found");
+      router.push("/classes");
     }
   };
 
@@ -57,6 +65,34 @@ const ShowClass = () => {
     });
   };
 
+  const deleteClass = async () => {
+    try {
+      await deleteDoc(doc(db, "classes", uid));
+
+      deleteClassAdmins();
+
+      alert("class deleted");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteClassAdmins = async () => {
+    const q = query(
+      collection(db, "classAdmins"),
+      where("class_id", "==", uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (doc) => {
+      deleteClassAdmin(doc.id);
+    });
+  };
+
+  const deleteClassAdmin = async (uid) => {
+    await deleteDoc(doc(db, "classAdmins", uid));
+  };
+
   return (
     <div>
       {isAdmin == true ? "You are admin for this class" : ""}
@@ -66,6 +102,7 @@ const ShowClass = () => {
         cumque doloribus ipsam voluptatem ad a nostrum repellendus deleniti
         provident voluptatibus et soluta.
       </p>
+      {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
     </div>
   );
 };
