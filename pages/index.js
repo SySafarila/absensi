@@ -1,11 +1,23 @@
 import { useRecoilState } from "recoil";
 import AuthController from "../components/AuthController";
 import { UserState } from "../components/RecoilState";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
 
 export default function Home() {
   const [user, setUser] = useRecoilState(UserState);
 
   const Auth = AuthController();
+  const db = getFirestore();
+
+  const addData = async () => {
+    const docRef = await addDoc(collection(db, "cities"), {
+      name: "Tokyo",
+      country: "Japan",
+    });
+
+    console.log(`Document written with ID : ${docRef.id}`);
+  };
+
   return (
     <>
       <p>
@@ -14,10 +26,10 @@ export default function Home() {
         assumenda, modi libero pariatur veniam minus placeat non rerum explicabo
         ipsum.
       </p>
-      {!user ? <button onClick={Auth.login}>Login</button> : ''}
-      {user ? <button onClick={Auth.logout}>Logout</button> : ''}
+      {!user ? <button onClick={Auth.login}>Login</button> : ""}
+      {user ? <button onClick={Auth.logout}>Logout</button> : ""}
       {/* <button onClick={Auth.checkAuth}>Check Login</button> */}
       <button onClick={() => console.log(user)}>User</button>
     </>
   );
-  }
+}
