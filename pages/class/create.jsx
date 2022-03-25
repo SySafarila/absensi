@@ -26,9 +26,12 @@ const CreateClass = () => {
     console.log(dataX);
 
     try {
-      const docRef = await addDoc(collection(db, "classes"), dataX);
-      console.log("Document written with ID: ", docRef.id);
-      alert("success");
+      const classRef = await addDoc(collection(db, "classes"), dataX);
+
+      const adminRef = await addDoc(collection(db, "classAdmins"), {
+        user_id: user?.uid,
+        class_id: classRef?.id
+      });
     } catch (err) {
       console.error(err);
     }
