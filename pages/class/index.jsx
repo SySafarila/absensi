@@ -66,7 +66,9 @@ const IndexClass = () => {
           <p>course : {doc.course}</p>
           <p>university : {doc.university}</p>
           <p>semester : {doc.semester}</p>
-          <Link href={`/class/${doc.uid}`}>Go</Link>
+          <Link href={`/class/${doc.uid}`}>
+              <a className="asd">Go</a>
+          </Link>
         </div>
       ))}
     </>
