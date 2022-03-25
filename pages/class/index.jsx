@@ -22,9 +22,10 @@ const IndexClass = () => {
 
     // cleanup
     return () => {
-        console.log('cleanup');
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      setClasses([]);
+      console.log("cleanup");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const getClasses = async () => {
@@ -33,7 +34,7 @@ const IndexClass = () => {
         collection(db, "classes"),
         where("user_id", "==", user?.uid)
       );
-      
+
       const querySnapshot = await getDocs(q);
 
       let arr = [];
@@ -65,6 +66,7 @@ const IndexClass = () => {
           <p>course : {doc.course}</p>
           <p>university : {doc.university}</p>
           <p>semester : {doc.semester}</p>
+          <Link href={`/class/${doc.uid}`}>Go</Link>
         </div>
       ))}
     </>
