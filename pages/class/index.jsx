@@ -5,6 +5,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
@@ -17,6 +18,11 @@ const IndexClass = () => {
   useEffect(() => {
     if (user && user.uid) {
       getClasses();
+    }
+
+    // cleanup
+    return () => {
+        console.log('cleanup');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -51,6 +57,7 @@ const IndexClass = () => {
         nemo corporis velit quis? Quidem debitis, laborum ratione ducimus
         impedit quas?
       </p>
+      <Link href="/class/create">Move</Link>
       {classes.map((doc) => (
         <div key={doc.uid} style={{ borderBottom: "1px solid black" }}>
           <p>uid : {doc.uid}</p>
