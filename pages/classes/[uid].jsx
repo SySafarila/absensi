@@ -16,6 +16,7 @@ import { UserState } from "../../components/RecoilState";
 const ShowClass = () => {
   const [classX, setClassX] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const user = useRecoilValue(UserState);
   const router = useRouter();
   const db = getFirestore();
@@ -33,6 +34,13 @@ const ShowClass = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
+
+  useEffect(() => {
+    if (isDeleted == true) {
+      router.push("/classes");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDeleted]);
 
   const getClass = async () => {
     console.log("getClass()");
@@ -87,6 +95,8 @@ const ShowClass = () => {
     querySnapshot.forEach(async (doc) => {
       deleteClassAdmin(doc.id);
     });
+
+    setIsDeleted(true);
   };
 
   const deleteClassAdmin = async (uid) => {
