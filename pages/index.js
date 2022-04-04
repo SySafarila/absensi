@@ -20,13 +20,17 @@ export default function Home() {
   };
 
   const Classes = () => {
-    return (
-      <>
-        <Link href="/classes/create">Buat Kelas</Link>
-        <span> | </span>
-        <Link href="/classes">Kelas</Link>
-      </>
-    );
+    if (user) {
+      return (
+        <>
+          <Link href="/classes/create">Buat Kelas</Link>
+          <span> | </span>
+          <Link href="/classes">Kelas</Link>
+        </>
+      );
+    } else {
+      return null;
+    }
   };
 
   return (
