@@ -52,13 +52,15 @@ const IndexClass = () => {
 
   return (
     <>
-      <p>
+      {/* <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga,
         voluptas. Quam omnis maiores quas? Culpa modi maxime labore distinctio
         nemo corporis velit quis? Quidem debitis, laborum ratione ducimus
         impedit quas?
-      </p>
-      <Link href="/classes/create">Create</Link>
+      </p> */}
+      <Link href="/classes/create">
+        <a>Create</a>
+      </Link>
       {classes.map((doc) => (
         <div key={doc.uid} style={{ borderBottom: "1px solid black" }}>
           <p>uid : {doc.uid}</p>
@@ -67,7 +69,7 @@ const IndexClass = () => {
           <p>university : {doc.university}</p>
           <p>semester : {doc.semester}</p>
           <Link href={`/classes/${doc.uid}`}>
-              <a className="asd">Go</a>
+            <a className="asd">Get In</a>
           </Link>
         </div>
       ))}

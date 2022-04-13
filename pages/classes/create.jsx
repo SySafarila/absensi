@@ -1,4 +1,5 @@
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
@@ -12,6 +13,7 @@ const CreateClass = () => {
   } = useForm();
   const user = useRecoilValue(UserState);
   const db = getFirestore();
+  const router = useRouter();
 
   const onSubmit = async (data) => {
     if (!user) {
@@ -23,15 +25,15 @@ const CreateClass = () => {
       user_id: user?.uid,
       created_at: new Date().getTime(),
     };
-    console.log(dataX);
 
     try {
       const classRef = await addDoc(collection(db, "classes"), dataX);
-
       const adminRef = await addDoc(collection(db, "classAdmins"), {
         user_id: user?.uid,
-        class_id: classRef?.id
+        class_id: classRef?.id,
       });
+
+      router.push(`/classes/${classRef.id}`);
     } catch (err) {
       console.error(err);
     }
