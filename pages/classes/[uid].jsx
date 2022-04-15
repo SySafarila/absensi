@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
+import CreatePresence from "../../components/classes/CreatePresence";
 
 const ShowClass = () => {
   const [classX, setClassX] = useState(null);
@@ -77,6 +78,7 @@ const ShowClass = () => {
     try {
       await deleteDoc(doc(db, "classes", uid));
 
+      deletePresences();
       deleteClassAdmins();
 
       alert("class deleted");
@@ -99,6 +101,20 @@ const ShowClass = () => {
     setIsDeleted(true);
   };
 
+  const deletePresences = async () => {
+    const q = query(collection(db, "presences"), where("class_uid", "==", uid));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (doc) => {
+      deletePresence(doc.id);
+    });
+  };
+
+  const deletePresence = async (uid) => {
+    await deleteDoc(doc(db, "presences", uid));
+  };
+
   const deleteClassAdmin = async (uid) => {
     await deleteDoc(doc(db, "classAdmins", uid));
   };
@@ -106,6 +122,7 @@ const ShowClass = () => {
   return (
     <div>
       {isAdmin == true ? "You are admin for this class" : ""}
+      {isAdmin ? <CreatePresence class_uid={uid} /> : ""}
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed
         accusantium veritatis labore eveniet, error perspiciatis quam iure
