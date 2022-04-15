@@ -50,6 +50,7 @@ const ShowClass = () => {
 
     if (docSnap.exists()) {
       setClassX(docSnap.data());
+      getPresences();
       getClassAdmins();
     } else {
       console.warn("404 Class not found");
@@ -71,6 +72,16 @@ const ShowClass = () => {
       if (doc.data()?.user_id == user?.uid) {
         setIsAdmin(true);
       }
+    });
+  };
+
+  const getPresences = async () => {
+    const q = query(collection(db, "presences"), where("class_uid", "==", uid));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
     });
   };
 
