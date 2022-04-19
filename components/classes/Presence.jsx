@@ -7,7 +7,7 @@ const Presence = (props) => {
   let { uid } = presence;
 
   useEffect(() => {
-    console.log(`presence : mounted ${uid}`);
+    console.log(`Presence : mounted ${uid}`);
     // const unsub = onSnapshot(doc(db, "presences", uid), (doc) => {
     //   console.count(uid);
     // });
