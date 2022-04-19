@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -23,6 +24,7 @@ const ShowClass = () => {
   const [isDeleted, setIsDeleted] = useState(false);
   const [presencesLoaded, setPresencesLoaded] = useState(false);
   const [presences, setPresences] = useState([]);
+  const [userClassesCheck, setUserClassesCheck] = useState(null);
   const user = useRecoilValue(UserState);
   const router = useRouter();
   const db = getFirestore();
@@ -33,6 +35,7 @@ const ShowClass = () => {
     if (user && uid) {
       console.log(`class_uid : ${uid}`);
       getClass();
+      UserClassCheck();
     }
 
     return () => {
@@ -209,19 +212,91 @@ const ShowClass = () => {
     }
   };
 
+  const UserClassCheck = async (props) => {
+    const q = query(
+      collection(db, "userClasses"),
+      where("user_id", "==", user?.uid),
+      where("class_id", "==", uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    let arr = [];
+    querySnapshot.forEach((doc) => {
+      arr.push({ ...doc.data(), uid: doc.id });
+    });
+
+    if (arr.length > 0) {
+      setUserClassesCheck(true);
+    } else {
+      setUserClassesCheck(false);
+    }
+  };
+
+  const UserClassCheckMiddleware = (props) => {
+    switch (userClassesCheck) {
+      case true:
+        return <>{props.children}</>;
+        break;
+
+      case false:
+        return (
+          <div>
+            <p>you want to join this class ?</p>
+            <button onClick={joinClass}>Join</button>
+          </div>
+        );
+
+      default:
+        return <p>Checking...</p>;
+        break;
+    }
+  };
+
+  const joinClass = async () => {
+    let conf = confirm("Join this class ?");
+
+    if (conf) {
+      const q = query(
+        collection(db, "userClasses"),
+        where("user_id", "==", user?.uid),
+        where("class_id", "==", uid)
+      );
+      const querySnapshot = await getDocs(q);
+
+      let arr = [];
+      querySnapshot.forEach((doc) => {
+        arr.push({ ...doc.data(), uid: doc.id });
+      });
+
+      if (arr.length == 0) {
+        try {
+          const docRef = await addDoc(collection(db, "userClasses"), {
+            class_id: uid,
+            user_id: user?.uid,
+          });
+          setUserClassesCheck(true);
+        } catch (er) {
+          setUserClassesCheck(false);
+        }
+      }
+    }
+  };
+
   return (
-    <div>
-      <IsAdmin>
-        <span>You are admin for this class</span>
-        <button onClick={deleteClass}>Delete this class</button>
-        <CreatePresence class_uid={uid} />
-      </IsAdmin>
-      <div>
-        {presences.map((data, i) => (
-          <Presence presence={data} key={i} isAdmin={isAdmin} />
-        ))}
-      </div>
-    </div>
+    <>
+      <UserClassCheckMiddleware>
+        <IsAdmin>
+          <span>You are admin for this class</span>
+          <button onClick={deleteClass}>Delete this class</button>
+          <CreatePresence class_uid={uid} />
+        </IsAdmin>
+        <div>
+          {presences.map((data, i) => (
+            <Presence presence={data} key={i} isAdmin={isAdmin} />
+          ))}
+        </div>
+      </UserClassCheckMiddleware>
+    </>
   );
 };
 
