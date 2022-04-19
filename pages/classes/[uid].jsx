@@ -13,11 +13,13 @@ import {
 import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
 import CreatePresence from "../../components/classes/CreatePresence";
+import Presence from "./presence";
 
 const ShowClass = () => {
   const [classX, setClassX] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [presences, setPresences] = useState([]);
   const user = useRecoilValue(UserState);
   const router = useRouter();
   const db = getFirestore();
@@ -80,9 +82,14 @@ const ShowClass = () => {
 
     const querySnapshot = await getDocs(q);
 
+    let arr = [];
+
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
+      // console.log(doc.data());
+      arr.push(doc.data());
     });
+
+    setPresences(arr);
   };
 
   const deleteClass = async () => {
@@ -150,15 +157,13 @@ const ShowClass = () => {
 
   return (
     <div>
-      {isAdmin == true ? "You are admin for this class" : ""}
+      {isAdmin == true ? "You are admin for this class" : ""} {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
       {isAdmin ? <CreatePresence class_uid={uid} /> : ""}
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed
-        accusantium veritatis labore eveniet, error perspiciatis quam iure
-        cumque doloribus ipsam voluptatem ad a nostrum repellendus deleniti
-        provident voluptatibus et soluta.
-      </p>
-      {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
+      <div>
+        {presences.map((presence, index) => (
+          <Presence key={index} message={presence.message} />
+        ))}
+      </div>
     </div>
   );
 };
