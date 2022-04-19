@@ -16,7 +16,7 @@ import CreatePresence from "../../components/classes/CreatePresence";
 import Presence from "../../components/classes/Presence";
 
 const ShowClass = () => {
-  const [classX, setClassX] = useState(null);
+  const [classExist, setClassExist] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [presencesLoaded, setPresencesLoaded] = useState(false);
@@ -26,6 +26,7 @@ const ShowClass = () => {
   const db = getFirestore();
   const { uid } = router.query;
 
+  // get class
   useEffect(() => {
     if (user && uid) {
       console.log(`class_uid : ${uid}`);
@@ -33,11 +34,27 @@ const ShowClass = () => {
     }
 
     return () => {
-      setClassX(null);
+      setClassExist(null);
       setIsAdmin(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
+
+  // get presences
+  useEffect(() => {
+    if (classExist) {
+      getPresences();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classExist]);
+
+  // get classAdmins
+  useEffect(() => {
+    if (classExist) {
+      getClassAdmins();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classExist]);
 
   useEffect(() => {
     if (isDeleted == true) {
@@ -52,9 +69,9 @@ const ShowClass = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      setClassX(docSnap.data());
-      getPresences();
-      getClassAdmins();
+      setClassExist(docSnap.data());
+      // getPresences();
+      // getClassAdmins();
     } else {
       console.warn("404 Class not found");
       router.push("/classes");
@@ -161,7 +178,11 @@ const ShowClass = () => {
   return (
     <div>
       {isAdmin == true ? "You are admin for this class" : ""}{" "}
-      {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
+      {classExist ? (
+        <button onClick={deleteClass}>Delete this class</button>
+      ) : (
+        ""
+      )}
       {isAdmin ? <CreatePresence class_uid={uid} /> : ""}
       <div>
         {presencesLoaded

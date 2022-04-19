@@ -16,6 +16,7 @@ const Presence = (props) => {
       console.log(`unsub ${uid}`);
       unsub();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
