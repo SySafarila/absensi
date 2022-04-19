@@ -25,7 +25,7 @@ const ShowClass = () => {
 
   useEffect(() => {
     if (user && uid) {
-      console.log(uid);
+      console.log(`class_uid : ${uid}`);
       getClass();
     }
 

@@ -1,4 +1,5 @@
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const CreatePresence = ({ class_uid }) => {
@@ -10,12 +11,17 @@ const CreatePresence = ({ class_uid }) => {
   } = useForm();
   const db = getFirestore();
 
+  useEffect(() => {
+    console.info("Create Presence : Mounted");
+  }, []);
+
   const onSubmit = async (data) => {
     // console.log({ ...data, class_uid });
     try {
       const docRef = await addDoc(collection(db, "presences"), {
         ...data,
         class_uid,
+        created_at: new Date().getTime(),
       });
       console.log(docRef.id);
     } catch (error) {
