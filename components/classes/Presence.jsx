@@ -30,12 +30,16 @@ const Presence = (props) => {
     }
   };
 
+  const checkin = (type) => {
+    console.log(`checkin for ${type}`);
+  }
+
   return (
     <div>
       <p>{presence.message}</p>
-      <button>Hadir</button>
-      <button>izin</button>
-      <button>sakit</button>
+      <button onClick={() => checkin('hadir')}>Hadir</button>
+      <button onClick={() => checkin('izin')}>izin</button>
+      <button onClick={() => checkin('sakit')}>sakit</button>
       {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
     </div>
   );
