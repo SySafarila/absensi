@@ -48,6 +48,7 @@ const ShowClass = () => {
   // get presences
   useEffect(() => {
     if (classExist) {
+      console.log("getPresences()");
       // getPresences(); // get datas once
 
       // listening datas
@@ -62,8 +63,8 @@ const ShowClass = () => {
           arr.push({ ...doc.data(), uid: doc.id });
         });
         setPresences(arr);
-        setPresencesLoaded(true);
       });
+      setPresencesLoaded(true);
 
       return () => {
         unsubs();
@@ -122,7 +123,11 @@ const ShowClass = () => {
   };
 
   const getPresences = async () => {
-    const q = query(collection(db, "presences"), where("class_uid", "==", uid));
+    const q = query(
+      collection(db, "presences"),
+      where("class_uid", "==", uid),
+      orderBy("created_at", "desc")
+    );
 
     const querySnapshot = await getDocs(q);
 
