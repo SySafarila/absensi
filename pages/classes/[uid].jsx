@@ -13,12 +13,13 @@ import {
 import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
 import CreatePresence from "../../components/classes/CreatePresence";
-import Presence from "./presence";
+import Presence from "../../components/classes/Presence";
 
 const ShowClass = () => {
   const [classX, setClassX] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [presencesLoaded, setPresencesLoaded] = useState(false);
   const [presences, setPresences] = useState([]);
   const user = useRecoilValue(UserState);
   const router = useRouter();
@@ -85,11 +86,13 @@ const ShowClass = () => {
     let arr = [];
 
     querySnapshot.forEach((doc) => {
-      // console.log(doc.data());
-      arr.push(doc.data());
+      // console.log({ ...doc.data(), uid: doc.id });
+      arr.push({ ...doc.data(), uid: doc.id });
     });
 
     setPresences(arr);
+    setPresencesLoaded(true);
+    // console.log(arr);
   };
 
   const deleteClass = async () => {
@@ -157,12 +160,15 @@ const ShowClass = () => {
 
   return (
     <div>
-      {isAdmin == true ? "You are admin for this class" : ""} {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
+      {isAdmin == true ? "You are admin for this class" : ""}{" "}
+      {classX ? <button onClick={deleteClass}>Delete this class</button> : ""}
       {isAdmin ? <CreatePresence class_uid={uid} /> : ""}
       <div>
-        {presences.map((presence, index) => (
-          <Presence key={index} message={presence.message} />
-        ))}
+        {presencesLoaded
+          ? presences.map((presence, index) => (
+              <Presence key={index} presence={presence} isAdmin={isAdmin} />
+            ))
+          : null}
       </div>
     </div>
   );
