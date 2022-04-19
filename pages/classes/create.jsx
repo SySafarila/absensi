@@ -32,6 +32,10 @@ const CreateClass = () => {
         user_id: user?.uid,
         class_id: classRef?.id,
       });
+      const userClassesRef = await addDoc(collection(db, "userClasses"), {
+        user_id: user?.uid,
+        class_id: classRef?.id,
+      });
 
       router.push(`/classes/${classRef.id}`);
     } catch (err) {
