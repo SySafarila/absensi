@@ -1,4 +1,4 @@
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { deleteDoc, doc, getFirestore, onSnapshot } from "firebase/firestore";
 import { useEffect } from "react";
 
 const Presence = (props) => {
@@ -8,16 +8,27 @@ const Presence = (props) => {
 
   useEffect(() => {
     console.log(`presence : mounted ${uid}`);
-    const unsub = onSnapshot(doc(db, "presences", uid), (doc) => {
-      console.count(uid);
-    });
+    // const unsub = onSnapshot(doc(db, "presences", uid), (doc) => {
+    //   console.count(uid);
+    // });
 
-    return () => {
-      console.log(`unsub ${uid}`);
-      unsub();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // return () => {
+    //   console.log(`unsub ${uid}`);
+    //   unsub();
+    // };
   }, []);
+
+  const deletePresence = async () => {
+    let conf = confirm("Delete this presence ?");
+    if (conf) {
+      try {
+        await deleteDoc(doc(db, "presences", uid));
+        console.log(`${uid} deleted`);
+      } catch (er) {
+        console.warning(er);
+      }
+    }
+  };
 
   return (
     <div>
@@ -25,7 +36,7 @@ const Presence = (props) => {
       <button>Hadir</button>
       <button>izin</button>
       <button>sakit</button>
-      {props.isAdmin ? <button>hapus</button> : null}
+      {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
     </div>
   );
 };

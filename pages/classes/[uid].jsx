@@ -7,6 +7,8 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -43,7 +45,28 @@ const ShowClass = () => {
   // get presences
   useEffect(() => {
     if (classExist) {
-      getPresences();
+      // getPresences(); // get datas once
+
+      // listening datas
+      const q = query(
+        collection(db, "presences"),
+        where("class_uid", "==", uid),
+        orderBy("created_at", "desc")
+      );
+      const unsubs = onSnapshot(q, (querySnapshot) => {
+        let arr = [];
+        querySnapshot.forEach((doc) => {
+          arr.push({ ...doc.data(), uid: doc.id });
+        });
+        setPresences(arr);
+        setPresencesLoaded(true);
+      });
+
+      return () => {
+        unsubs();
+        setPresences([]);
+        setPresencesLoaded(false);
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classExist]);
@@ -113,16 +136,19 @@ const ShowClass = () => {
   };
 
   const deleteClass = async () => {
-    try {
-      await deleteDoc(doc(db, "classes", uid));
+    let conf = confirm("Delete this class ?");
+    if (conf) {
+      try {
+        await deleteDoc(doc(db, "classes", uid));
 
-      deletePresences();
-      deleteClassAdmins();
-      deleteUserClasses();
+        deletePresences();
+        deleteClassAdmins();
+        deleteUserClasses();
 
-      alert("class deleted");
-    } catch (err) {
-      console.log(err);
+        alert("class deleted");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -175,21 +201,25 @@ const ShowClass = () => {
     await deleteDoc(doc(db, "userClasses", uid));
   };
 
+  const IsAdmin = (props) => {
+    if (isAdmin) {
+      return <>{props.children}</>;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div>
-      {isAdmin == true ? "You are admin for this class" : ""}{" "}
-      {classExist ? (
+      <IsAdmin>
+        <span>You are admin for this class</span>
         <button onClick={deleteClass}>Delete this class</button>
-      ) : (
-        ""
-      )}
-      {isAdmin ? <CreatePresence class_uid={uid} /> : ""}
+        <CreatePresence class_uid={uid} />
+      </IsAdmin>
       <div>
-        {presencesLoaded
-          ? presences.map((presence, index) => (
-              <Presence key={index} presence={presence} isAdmin={isAdmin} />
-            ))
-          : null}
+        {presences.map((data, i) => (
+          <Presence presence={data} key={i} isAdmin={isAdmin} />
+        ))}
       </div>
     </div>
   );

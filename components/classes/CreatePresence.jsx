@@ -7,6 +7,7 @@ const CreatePresence = ({ class_uid }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
   const db = getFirestore();
@@ -22,6 +23,9 @@ const CreatePresence = ({ class_uid }) => {
         ...data,
         class_uid,
         created_at: new Date().getTime(),
+      });
+      reset({
+        message: null,
       });
       console.log(docRef.id);
     } catch (error) {
