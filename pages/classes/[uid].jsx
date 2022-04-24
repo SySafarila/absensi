@@ -17,6 +17,7 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "../../components/RecoilState";
 import CreatePresence from "../../components/classes/CreatePresence";
 import Presence from "../../components/classes/Presence";
+import AdminManager from "../../components/classes/AdminManager";
 
 const ShowClass = () => {
   const [classExist, setClassExist] = useState(null);
@@ -293,6 +294,7 @@ const ShowClass = () => {
         <IsAdmin>
           <span>You are admin for this class</span>
           <button onClick={deleteClass}>Delete this class</button>
+          <AdminManager class_uid={uid} />
           <CreatePresence class_uid={uid} />
         </IsAdmin>
         <div>
