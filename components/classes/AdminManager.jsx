@@ -110,7 +110,8 @@ const AdminManager = (props) => {
   const deleteUser = async (user_id) => {
     const q = query(
       collection(db, "userClasses"),
-      where("class_id", "==", class_uid)
+      where("class_id", "==", class_uid),
+      where("user_id", "==", user_id)
     );
 
     const querySnapshot = await getDocs(q);
