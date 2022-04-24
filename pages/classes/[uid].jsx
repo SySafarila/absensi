@@ -36,7 +36,7 @@ const ShowClass = () => {
     if (user && uid) {
       console.log(`class_uid : ${uid}`);
       getClass();
-      UserClassCheck();
+      // UserClassCheck();
     }
 
     return () => {
@@ -45,6 +45,31 @@ const ShowClass = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
+
+  // userClassCheck
+  useEffect(() => {
+    if (classExist) {
+      const q = query(
+        collection(db, "userClasses"),
+        where("user_id", "==", user?.uid),
+        where("class_id", "==", uid)
+      );
+
+      const unsubs = onSnapshot(q, (querySnapshot) => {
+        let arr = [];
+
+        querySnapshot.forEach((doc) => {
+          arr.push(doc.data());
+        });
+
+        if (arr.length > 0) {
+          setUserClassesCheck(true);
+        } else {
+          setUserClassesCheck(false);
+        }
+      });
+    }
+  }, [classExist]);
 
   // get presences
   useEffect(() => {
@@ -79,7 +104,34 @@ const ShowClass = () => {
   // get classAdmins
   useEffect(() => {
     if (classExist) {
-      getClassAdmins();
+      // getClassAdmins();
+      console.log("getClassAdmins()");
+      const q = query(
+        collection(db, "classAdmins"),
+        where("class_id", "==", uid),
+        where("user_id", "==", user.uid)
+      );
+
+      const unsubs = onSnapshot(q, (querySnapshot) => {
+        let arr = [];
+
+        querySnapshot.forEach((doc) => {
+          if (doc.data()?.user_id == user?.uid) {
+            arr.push(doc.data());
+          }
+          console.log(doc.data());
+        });
+
+        if (arr.length > 0) {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+      });
+
+      return () => {
+        unsubs();
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classExist]);
