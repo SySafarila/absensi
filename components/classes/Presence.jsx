@@ -35,9 +35,9 @@ const Presence = (props) => {
       querySnapshot.forEach((doc) => {
         arr.push({ ...doc.data(), uid: doc.id });
       });
-      if (arr.length > 0) {
+      // if (arr.length > 0) {
         setUserCheckoin(arr[0]);
-      }
+      // }
     });
 
     return () => {
@@ -75,6 +75,11 @@ const Presence = (props) => {
 
       if (arr.length > 0) {
         await deleteDoc(doc(db, "presenceTypes", arr[0].uid));
+
+        if (type == 'cancel') {
+          return;
+        }
+        
         const DocRef = await addDoc(collection(db, "presenceTypes"), {
           user_id: user?.uid,
           presence_id: uid,
@@ -94,18 +99,6 @@ const Presence = (props) => {
     } catch (er) {
       console.log(er);
     }
-
-    // try {
-    //   const DocRef = await addDoc(collection(db, "presenceTypes"), {
-    //     user_id: user?.uid,
-    //     presence_id: uid,
-    //     type: type,
-    //     class_id: presence.class_uid,
-    //     created_at: new Date().getTime(),
-    //   });
-    // } catch (er) {
-    //   console.log(er);
-    // }
   };
 
   return (
@@ -116,6 +109,7 @@ const Presence = (props) => {
       <button onClick={() => checkin("hadir")}>Hadir</button>
       <button onClick={() => checkin("izin")}>izin</button>
       <button onClick={() => checkin("sakit")}>sakit</button>
+      <button onClick={() => checkin("cancel")}>cancel</button>
       {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
     </>
   );
