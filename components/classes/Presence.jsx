@@ -15,6 +15,7 @@ import { UserState } from "../RecoilState";
 
 const Presence = (props) => {
   const [userCheckin, setUserCheckoin] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const db = getFirestore();
   const user = useRecoilValue(UserState);
@@ -24,6 +25,7 @@ const Presence = (props) => {
   useEffect(() => {
     console.log(`Presence : mounted ${uid}`);
 
+    // check userCheckIn
     const q = query(
       collection(db, "presenceTypes"),
       where("presence_id", "==", uid),
@@ -32,17 +34,35 @@ const Presence = (props) => {
 
     const unsubs = onSnapshot(q, (querySnapshot) => {
       let arr = [];
+
       querySnapshot.forEach((doc) => {
         arr.push({ ...doc.data(), uid: doc.id });
       });
-      // if (arr.length > 0) {
-        setUserCheckoin(arr[0]);
-      // }
+
+      setUserCheckoin(arr[0]);
+    });
+
+    // get presenceTypes records
+    const q2 = query(
+      collection(db, "presenceTypes"),
+      where("presence_id", "==", uid)
+    );
+
+    const unsubs2 = onSnapshot(q2, (querySnapshot) => {
+      let arr = [];
+
+      querySnapshot.forEach((doc) => {
+        arr.push({ ...doc.data(), uid: doc.id });
+      });
+
+      setUsers(arr);
     });
 
     return () => {
       unsubs();
+      unsubs2();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deletePresence = async () => {
@@ -76,10 +96,10 @@ const Presence = (props) => {
       if (arr.length > 0) {
         await deleteDoc(doc(db, "presenceTypes", arr[0].uid));
 
-        if (type == 'cancel') {
+        if (type == "cancel") {
           return;
         }
-        
+
         const DocRef = await addDoc(collection(db, "presenceTypes"), {
           user_id: user?.uid,
           presence_id: uid,
@@ -103,8 +123,11 @@ const Presence = (props) => {
 
   return (
     <>
-      <p>
-        {presence.message} | {userCheckin ? userCheckin.type : ""}
+      <p style={{ display: "flex", flexDirection: "column" }}>
+        <span>
+          {presence.message} | {userCheckin ? userCheckin.type : ""}
+        </span>
+        <span>{users.length} records</span>
       </p>
       <button onClick={() => checkin("hadir")}>Hadir</button>
       <button onClick={() => checkin("izin")}>izin</button>
