@@ -108,6 +108,10 @@ const Presence = (props) => {
           created_at: new Date().getTime(),
         });
       } else {
+        if (type == "cancel") {
+          return;
+        }
+
         const DocRef = await addDoc(collection(db, "presenceTypes"), {
           user_id: user?.uid,
           presence_id: uid,
