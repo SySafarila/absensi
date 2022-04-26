@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import ShowClasses from "../../components/classes/ShowClasses";
 import { UserState } from "../../components/RecoilState";
 
 const IndexClass = () => {
@@ -31,7 +32,7 @@ const IndexClass = () => {
   const getClasses = async () => {
     try {
       const q = query(
-        collection(db, "classes"),
+        collection(db, "userClasses"),
         where("user_id", "==", user?.uid)
       );
 
@@ -52,26 +53,11 @@ const IndexClass = () => {
 
   return (
     <>
-      {/* <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga,
-        voluptas. Quam omnis maiores quas? Culpa modi maxime labore distinctio
-        nemo corporis velit quis? Quidem debitis, laborum ratione ducimus
-        impedit quas?
-      </p> */}
       <Link href="/classes/create">
         <a>Create</a>
       </Link>
       {classes.map((doc) => (
-        <div key={doc.uid} style={{ borderBottom: "1px solid black" }}>
-          <p>uid : {doc.uid}</p>
-          <p>name : {doc.name}</p>
-          <p>course : {doc.course}</p>
-          <p>university : {doc.university}</p>
-          <p>semester : {doc.semester}</p>
-          <Link href={`/classes/${doc.uid}`}>
-            <a className="asd">Get In</a>
-          </Link>
-        </div>
+        <ShowClasses uid={doc?.class_id} key={doc?.uid} />
       ))}
     </>
   );
