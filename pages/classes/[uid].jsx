@@ -69,6 +69,7 @@ const ShowClass = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classExist]);
 
   // get presences

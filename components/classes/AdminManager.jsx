@@ -41,6 +41,7 @@ const AdminManager = (props) => {
     return () => {
       unsubs();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //   get userClasses
@@ -62,6 +63,7 @@ const AdminManager = (props) => {
     return () => {
       unsubs();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setAsAdmin = async (user_id) => {
