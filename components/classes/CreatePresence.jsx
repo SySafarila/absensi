@@ -13,7 +13,7 @@ const CreatePresence = ({ class_uid }) => {
   const db = getFirestore();
 
   useEffect(() => {
-    console.info("Create Presence : Mounted");
+    console.info("Create Presence : Mounteds");
   }, []);
 
   const onSubmit = async (data) => {
