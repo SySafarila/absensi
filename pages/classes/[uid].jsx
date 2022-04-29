@@ -296,7 +296,7 @@ const ShowClass = () => {
     </>
   );
 };
-
+// 
 const IsAdmin = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const db = getFirestore();
