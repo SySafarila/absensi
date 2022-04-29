@@ -1,8 +1,9 @@
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
-const CreatePresence = ({ class_uid }) => {
+const CreatePresence = () => {
   const {
     register,
     handleSubmit,
@@ -11,9 +12,11 @@ const CreatePresence = ({ class_uid }) => {
     formState: { errors },
   } = useForm();
   const db = getFirestore();
+  const router = useRouter();
+  const { uid } = router.query;
 
   useEffect(() => {
-    console.info("Create Presence : Mounted");
+    console.count("<CreatePresence />");
   }, []);
 
   const onSubmit = async (data) => {
@@ -21,7 +24,7 @@ const CreatePresence = ({ class_uid }) => {
     try {
       const docRef = await addDoc(collection(db, "presences"), {
         ...data,
-        class_uid,
+        class_uid: uid,
         created_at: new Date().getTime(),
       });
       reset({
@@ -35,7 +38,7 @@ const CreatePresence = ({ class_uid }) => {
 
   return (
     <div>
-      <p>You can create presence for {class_uid}</p>
+      <p>You can create presence for {uid} / this class</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <textarea
           name="message"

@@ -14,12 +14,12 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
 import { useRouter } from "next/router";
 
-const AdminManager = ({class_uid}) => {
+const AdminManager = () => {
   const [admins, setAdmins] = useState([]);
   const [userClasses, setUserClasses] = useState([]);
   let user = useRecoilValue(UserState);
-  // const router = useRouter();
-  // let class_uid = router.query.uid;
+  const router = useRouter();
+  let class_uid = router.query.uid;
   const db = getFirestore();
 
   //   get admins

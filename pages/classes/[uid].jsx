@@ -222,10 +222,10 @@ const ShowClass = () => {
       <LoginRequired>
         <UserClassCheckMiddleware>
           <IsAdmin>
-            <span>You are admin for this class</span>
+            <span>You are admin for this class{" "}</span>
             <button onClick={deleteClass}>Delete this class</button>
-            <AdminManager class_uid={uid} />
-            <CreatePresence class_uid={uid} />
+            <AdminManager />
+            <CreatePresence />
           </IsAdmin>
           <div>
             {presences.map((data, i) => (
