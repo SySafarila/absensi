@@ -12,16 +12,19 @@ import {
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
+import { useRouter } from "next/router";
 
-const AdminManager = (props) => {
+const AdminManager = ({class_uid}) => {
   const [admins, setAdmins] = useState([]);
   const [userClasses, setUserClasses] = useState([]);
   let user = useRecoilValue(UserState);
-  let class_uid = props.class_uid;
+  // const router = useRouter();
+  // let class_uid = router.query.uid;
   const db = getFirestore();
 
   //   get admins
   useEffect(() => {
+    console.count("<AdminManager />");
     const q = query(
       collection(db, "classAdmins"),
       where("class_id", "==", class_uid)
@@ -33,7 +36,7 @@ const AdminManager = (props) => {
         arr.push({ ...data.data(), uid: data.id });
       });
       setAdmins(arr);
-      console.log("Admins : ", arr);
+      // console.log("Admins : ", arr);
     });
 
     // console.log(user);
@@ -57,7 +60,7 @@ const AdminManager = (props) => {
         arr.push({ ...data.data(), uid: data.id });
       });
       setUserClasses(arr);
-      console.log("userClasses : ", arr);
+      // console.log("userClasses : ", arr);
     });
 
     return () => {

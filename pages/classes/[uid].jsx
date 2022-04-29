@@ -46,31 +46,31 @@ const ShowClass = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
 
-  // userClassCheck
-  useEffect(() => {
-    if (classExist) {
-      const q = query(
-        collection(db, "userClasses"),
-        where("user_id", "==", user?.uid),
-        where("class_id", "==", uid)
-      );
+  // // userClassCheck
+  // useEffect(() => {
+  //   if (classExist) {
+  //     const q = query(
+  //       collection(db, "userClasses"),
+  //       where("user_id", "==", user?.uid),
+  //       where("class_id", "==", uid)
+  //     );
 
-      const unsubs = onSnapshot(q, (querySnapshot) => {
-        let arr = [];
+  //     const unsubs = onSnapshot(q, (querySnapshot) => {
+  //       let arr = [];
 
-        querySnapshot.forEach((doc) => {
-          arr.push(doc.data());
-        });
+  //       querySnapshot.forEach((doc) => {
+  //         arr.push(doc.data());
+  //       });
 
-        if (arr.length > 0) {
-          setUserClassesCheck(true);
-        } else {
-          setUserClassesCheck(false);
-        }
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classExist]);
+  //       if (arr.length > 0) {
+  //         setUserClassesCheck(true);
+  //       } else {
+  //         setUserClassesCheck(false);
+  //       }
+  //     });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [classExist]);
 
   // get presences
   useEffect(() => {
@@ -120,7 +120,7 @@ const ShowClass = () => {
           if (doc.data()?.user_id == user?.uid) {
             arr.push(doc.data());
           }
-          console.log(doc.data());
+          // console.log(doc.data());
         });
 
         if (arr.length > 0) {
@@ -174,27 +174,6 @@ const ShowClass = () => {
         setIsAdmin(true);
       }
     });
-  };
-
-  const getPresences = async () => {
-    const q = query(
-      collection(db, "presences"),
-      where("class_uid", "==", uid),
-      orderBy("created_at", "desc")
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    let arr = [];
-
-    querySnapshot.forEach((doc) => {
-      // console.log({ ...doc.data(), uid: doc.id });
-      arr.push({ ...doc.data(), uid: doc.id });
-    });
-
-    setPresences(arr);
-    setPresencesLoaded(true);
-    // console.log(arr);
   };
 
   const deleteClass = async () => {
@@ -263,54 +242,6 @@ const ShowClass = () => {
     await deleteDoc(doc(db, "userClasses", uid));
   };
 
-  const IsAdmin = (props) => {
-    if (isAdmin) {
-      return <>{props.children}</>;
-    } else {
-      return null;
-    }
-  };
-
-  const UserClassCheck = async (props) => {
-    const q = query(
-      collection(db, "userClasses"),
-      where("user_id", "==", user?.uid),
-      where("class_id", "==", uid)
-    );
-    const querySnapshot = await getDocs(q);
-
-    let arr = [];
-    querySnapshot.forEach((doc) => {
-      arr.push({ ...doc.data(), uid: doc.id });
-    });
-
-    if (arr.length > 0) {
-      setUserClassesCheck(true);
-    } else {
-      setUserClassesCheck(false);
-    }
-  };
-
-  const UserClassCheckMiddleware = (props) => {
-    switch (userClassesCheck) {
-      case true:
-        return <>{props.children}</>;
-        break;
-
-      case false:
-        return (
-          <div>
-            <p>you want to join this class ?</p>
-            <button onClick={joinClass}>Join</button>
-          </div>
-        );
-
-      default:
-        return <p>Checking...</p>;
-        break;
-    }
-  };
-
   const joinClass = async () => {
     let conf = confirm("Join this class ?");
 
@@ -343,40 +274,128 @@ const ShowClass = () => {
 
   return (
     <>
-      {userClassesCheck == true ? (
-        <>
-          {isAdmin ? (
+      {user ? (
+        <UserClassCheckMiddleware>
+          <IsAdmin>
             <>
               <span>You are admin for this class</span>
               <button onClick={deleteClass}>Delete this class</button>
               <AdminManager class_uid={uid} />
               <CreatePresence class_uid={uid} />
             </>
-          ) : (
-            ""
-          )}
+          </IsAdmin>
           <div>
             {presences.map((data, i) => (
               <Presence presence={data} key={i} isAdmin={isAdmin} />
             ))}
           </div>
-        </>
+        </UserClassCheckMiddleware>
       ) : (
         ""
       )}
-      {userClassesCheck == false ? (
-        <>
-          <div>
-            <p>you want to join this class ?</p>
-            <button onClick={joinClass}>Join</button>
-          </div>
-        </>
-      ) : (
-        ""
-      )}
-      {userClassesCheck != true || userClassesCheck != false ? 'loading' : ''}
     </>
   );
+};
+
+const IsAdmin = (props) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const db = getFirestore();
+  const router = useRouter();
+  const { uid } = router.query;
+  const user = useRecoilValue(UserState);
+
+  // get classAdmins
+  useEffect(() => {
+    // if (classExist) {
+    // getClassAdmins();
+    console.log("getClassAdmins()");
+    const q = query(
+      collection(db, "classAdmins"),
+      where("class_id", "==", uid),
+      where("user_id", "==", user.uid)
+    );
+
+    const unsubs = onSnapshot(q, (querySnapshot) => {
+      let arr = [];
+
+      querySnapshot.forEach((doc) => {
+        if (doc.data()?.user_id == user?.uid) {
+          arr.push(doc.data());
+        }
+        // console.log(doc.data());
+      });
+
+      if (arr.length > 0) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => {
+      unsubs();
+    };
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isAdmin) {
+    return <>{props.children}</>;
+  } else {
+    return null;
+  }
+};
+
+const UserClassCheckMiddleware = (props) => {
+  const [userClassesCheck, setUserClassesCheck] = useState(null);
+  const db = getFirestore();
+  const user = useRecoilValue(UserState);
+  const router = useRouter();
+  const { uid } = router.query;
+
+  // userClassCheck
+  useEffect(() => {
+    // if () {
+    const q = query(
+      collection(db, "userClasses"),
+      where("user_id", "==", user?.uid),
+      where("class_id", "==", uid)
+    );
+
+    const unsubs = onSnapshot(q, (querySnapshot) => {
+      let arr = [];
+
+      querySnapshot.forEach((doc) => {
+        arr.push(doc.data());
+      });
+
+      if (arr.length > 0) {
+        setUserClassesCheck(true);
+      } else {
+        setUserClassesCheck(false);
+      }
+    });
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  switch (userClassesCheck) {
+    case true:
+      return <>{props.children}</>;
+      break;
+
+    case false:
+      return (
+        <div>
+          <p>you want to join this class ?</p>
+          <button onClick={joinClass}>Join</button>
+        </div>
+      );
+
+    default:
+      return <p>Checking...</p>;
+      break;
+  }
 };
 
 export default ShowClass;
