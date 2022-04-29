@@ -343,19 +343,38 @@ const ShowClass = () => {
 
   return (
     <>
-      <UserClassCheckMiddleware>
-        <IsAdmin>
-          <span>You are admin for this class</span>
-          <button onClick={deleteClass}>Delete this class</button>
-          <AdminManager class_uid={uid} />
-          <CreatePresence class_uid={uid} />
-        </IsAdmin>
-        <div>
-          {presences.map((data, i) => (
-            <Presence presence={data} key={i} isAdmin={isAdmin} />
-          ))}
-        </div>
-      </UserClassCheckMiddleware>
+      {userClassesCheck == true ? (
+        <>
+          {isAdmin ? (
+            <>
+              <span>You are admin for this class</span>
+              <button onClick={deleteClass}>Delete this class</button>
+              <AdminManager class_uid={uid} />
+              <CreatePresence class_uid={uid} />
+            </>
+          ) : (
+            ""
+          )}
+          <div>
+            {presences.map((data, i) => (
+              <Presence presence={data} key={i} isAdmin={isAdmin} />
+            ))}
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      {userClassesCheck == false ? (
+        <>
+          <div>
+            <p>you want to join this class ?</p>
+            <button onClick={joinClass}>Join</button>
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      {userClassesCheck != true || userClassesCheck != false ? 'loading' : ''}
     </>
   );
 };
