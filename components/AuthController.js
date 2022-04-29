@@ -66,7 +66,7 @@ const AuthController = () => {
       } else {
         // User is signed out
         // ...
-        setUser(null);
+        setUser(false);
       }
     });
   };
@@ -76,7 +76,7 @@ const AuthController = () => {
     // if (user) {
     signOut(auth)
       .then(() => {
-        setUser(null);
+        setUser(false);
       })
       .catch((error) => {
         console.log(error);

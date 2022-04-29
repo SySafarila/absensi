@@ -18,14 +18,15 @@ import { UserState } from "../../components/RecoilState";
 import CreatePresence from "../../components/classes/CreatePresence";
 import Presence from "../../components/classes/Presence";
 import AdminManager from "../../components/classes/AdminManager";
+import LoginRequired from "../../components/LoginRequired";
 
 const ShowClass = () => {
   const [classExist, setClassExist] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
-  const [presencesLoaded, setPresencesLoaded] = useState(false);
+  // const [presencesLoaded, setPresencesLoaded] = useState(false);
   const [presences, setPresences] = useState([]);
-  const [userClassesCheck, setUserClassesCheck] = useState(null);
+  // const [userClassesCheck, setUserClassesCheck] = useState(null);
   const user = useRecoilValue(UserState);
   const router = useRouter();
   const db = getFirestore();
@@ -46,32 +47,6 @@ const ShowClass = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, uid]);
 
-  // // userClassCheck
-  // useEffect(() => {
-  //   if (classExist) {
-  //     const q = query(
-  //       collection(db, "userClasses"),
-  //       where("user_id", "==", user?.uid),
-  //       where("class_id", "==", uid)
-  //     );
-
-  //     const unsubs = onSnapshot(q, (querySnapshot) => {
-  //       let arr = [];
-
-  //       querySnapshot.forEach((doc) => {
-  //         arr.push(doc.data());
-  //       });
-
-  //       if (arr.length > 0) {
-  //         setUserClassesCheck(true);
-  //       } else {
-  //         setUserClassesCheck(false);
-  //       }
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [classExist]);
-
   // get presences
   useEffect(() => {
     if (classExist) {
@@ -91,12 +66,12 @@ const ShowClass = () => {
         });
         setPresences(arr);
       });
-      setPresencesLoaded(true);
+      // setPresencesLoaded(true);
 
       return () => {
         unsubs();
         setPresences([]);
-        setPresencesLoaded(false);
+        // setPresencesLoaded(false);
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,6 +217,107 @@ const ShowClass = () => {
     await deleteDoc(doc(db, "userClasses", uid));
   };
 
+  return (
+    <>
+      <LoginRequired>
+        <UserClassCheckMiddleware>
+          <IsAdmin>
+            <span>You are admin for this class</span>
+            <button onClick={deleteClass}>Delete this class</button>
+            <AdminManager class_uid={uid} />
+            <CreatePresence class_uid={uid} />
+          </IsAdmin>
+          <div>
+            {presences.map((data, i) => (
+              <Presence presence={data} key={i} isAdmin={isAdmin} />
+            ))}
+          </div>
+        </UserClassCheckMiddleware>
+      </LoginRequired>
+    </>
+  );
+};
+
+const IsAdmin = (props) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const db = getFirestore();
+  const router = useRouter();
+  const { uid } = router.query;
+  const user = useRecoilValue(UserState);
+
+  // get classAdmins
+  useEffect(() => {
+    console.log("getClassAdmins()");
+    const q = query(
+      collection(db, "classAdmins"),
+      where("class_id", "==", uid),
+      where("user_id", "==", user.uid)
+    );
+
+    const unsubs = onSnapshot(q, (querySnapshot) => {
+      let arr = [];
+
+      querySnapshot.forEach((doc) => {
+        if (doc.data()?.user_id == user?.uid) {
+          arr.push(doc.data());
+        }
+        // console.log(doc.data());
+      });
+
+      if (arr.length > 0) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => {
+      unsubs();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isAdmin) {
+    return <>{props.children}</>;
+  } else {
+    return null;
+  }
+};
+
+const UserClassCheckMiddleware = (props) => {
+  const [userClassesCheck, setUserClassesCheck] = useState(null);
+  const db = getFirestore();
+  const user = useRecoilValue(UserState);
+  const router = useRouter();
+  const { uid } = router.query;
+
+  // userClassCheck
+  useEffect(() => {
+    const q = query(
+      collection(db, "userClasses"),
+      where("user_id", "==", user?.uid),
+      where("class_id", "==", uid)
+    );
+
+    const unsubs = onSnapshot(q, (querySnapshot) => {
+      let arr = [];
+
+      querySnapshot.forEach((doc) => {
+        arr.push(doc.data());
+      });
+
+      if (arr.length > 0) {
+        setUserClassesCheck(true);
+      } else {
+        setUserClassesCheck(false);
+      }
+    });
+    return () => {
+      unsubs();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const joinClass = async () => {
     let conf = confirm("Join this class ?");
 
@@ -271,113 +347,6 @@ const ShowClass = () => {
       }
     }
   };
-
-  return (
-    <>
-      {user ? (
-        <UserClassCheckMiddleware>
-          <IsAdmin>
-            <>
-              <span>You are admin for this class</span>
-              <button onClick={deleteClass}>Delete this class</button>
-              <AdminManager class_uid={uid} />
-              <CreatePresence class_uid={uid} />
-            </>
-          </IsAdmin>
-          <div>
-            {presences.map((data, i) => (
-              <Presence presence={data} key={i} isAdmin={isAdmin} />
-            ))}
-          </div>
-        </UserClassCheckMiddleware>
-      ) : (
-        ""
-      )}
-    </>
-  );
-};
-// 
-const IsAdmin = (props) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const db = getFirestore();
-  const router = useRouter();
-  const { uid } = router.query;
-  const user = useRecoilValue(UserState);
-
-  // get classAdmins
-  useEffect(() => {
-    // if (classExist) {
-    // getClassAdmins();
-    console.log("getClassAdmins()");
-    const q = query(
-      collection(db, "classAdmins"),
-      where("class_id", "==", uid),
-      where("user_id", "==", user.uid)
-    );
-
-    const unsubs = onSnapshot(q, (querySnapshot) => {
-      let arr = [];
-
-      querySnapshot.forEach((doc) => {
-        if (doc.data()?.user_id == user?.uid) {
-          arr.push(doc.data());
-        }
-        // console.log(doc.data());
-      });
-
-      if (arr.length > 0) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-    });
-
-    return () => {
-      unsubs();
-    };
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (isAdmin) {
-    return <>{props.children}</>;
-  } else {
-    return null;
-  }
-};
-
-const UserClassCheckMiddleware = (props) => {
-  const [userClassesCheck, setUserClassesCheck] = useState(null);
-  const db = getFirestore();
-  const user = useRecoilValue(UserState);
-  const router = useRouter();
-  const { uid } = router.query;
-
-  // userClassCheck
-  useEffect(() => {
-    // if () {
-    const q = query(
-      collection(db, "userClasses"),
-      where("user_id", "==", user?.uid),
-      where("class_id", "==", uid)
-    );
-
-    const unsubs = onSnapshot(q, (querySnapshot) => {
-      let arr = [];
-
-      querySnapshot.forEach((doc) => {
-        arr.push(doc.data());
-      });
-
-      if (arr.length > 0) {
-        setUserClassesCheck(true);
-      } else {
-        setUserClassesCheck(false);
-      }
-    });
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   switch (userClassesCheck) {
     case true:
