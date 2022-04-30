@@ -134,23 +134,6 @@ const ShowClass = () => {
     }
   };
 
-  const getClassAdmins = async () => {
-    console.log("getClassAdmins()");
-    const q = query(
-      collection(db, "classAdmins"),
-      where("class_id", "==", uid)
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      //   console.log({ ...doc.data(), uid: doc.id });
-      if (doc.data()?.user_id == user?.uid) {
-        setIsAdmin(true);
-      }
-    });
-  };
-
   const deleteClass = async () => {
     let conf = confirm("Delete this class ?");
     if (conf) {
