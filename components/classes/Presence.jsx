@@ -134,10 +134,16 @@ const Presence = (props) => {
         </span>
         <span>{users.length} records</span>
       </p>
-      <button onClick={() => checkin("hadir")}>Hadir</button>
-      <button onClick={() => checkin("izin")}>izin</button>
-      <button onClick={() => checkin("sakit")}>sakit</button>
-      <button onClick={() => checkin("cancel")}>cancel</button>
+      {userCheckin ? (
+        <button onClick={() => checkin("cancel")}>cancel</button>
+      ) : (
+        <>
+          <button onClick={() => checkin("hadir")}>Hadir</button>
+          <button onClick={() => checkin("izin")}>izin</button>
+          <button onClick={() => checkin("sakit")}>sakit</button>
+        </>
+      )}
+
       {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
     </>
   );
