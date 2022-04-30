@@ -23,7 +23,7 @@ const Presence = (props) => {
   let { uid } = presence;
 
   useEffect(() => {
-    console.log(`Presence : mounted ${uid}`);
+    console.log(`<Presence /> : mounted ${uid}`);
 
     // check userCheckIn
     const q = query(
@@ -61,9 +61,10 @@ const Presence = (props) => {
     return () => {
       unsubs();
       unsubs2();
+      console.log(`<Presence /> : unmounted ${uid}`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uid]);
 
   const deletePresence = async () => {
     let conf = confirm("Delete this presence ?");

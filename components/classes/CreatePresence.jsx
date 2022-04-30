@@ -30,7 +30,7 @@ const CreatePresence = () => {
       reset({
         message: null,
       });
-      console.log(docRef.id);
+      console.log(`Presence stored with ID : ${docRef.id}`);
     } catch (error) {
       console.log(error);
     }
