@@ -222,7 +222,7 @@ const ShowClass = () => {
       <LoginRequired>
         <UserClassCheckMiddleware>
           <IsAdmin>
-            <span>You are admin for this class{" "}</span>
+            <span>You are admin for this class </span>
             <button onClick={deleteClass}>Delete this class</button>
             <AdminManager />
             <CreatePresence />
@@ -245,9 +245,9 @@ const IsAdmin = (props) => {
   const { uid } = router.query;
   const user = useRecoilValue(UserState);
 
-  // get classAdmins
+  // isAdmin
   useEffect(() => {
-    console.log("getClassAdmins()");
+    console.log("<isAdmin />");
     const q = query(
       collection(db, "classAdmins"),
       where("class_id", "==", uid),
@@ -293,6 +293,7 @@ const UserClassCheckMiddleware = (props) => {
 
   // userClassCheck
   useEffect(() => {
+    console.count("<UserClassCheckMiddleware />");
     const q = query(
       collection(db, "userClasses"),
       where("user_id", "==", user?.uid),
