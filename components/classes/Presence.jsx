@@ -9,9 +9,11 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
+import UserData from "./UserData";
 
 const Presence = (props) => {
   const [userCheckin, setUserCheckoin] = useState(false);
@@ -32,7 +34,7 @@ const Presence = (props) => {
       where("user_id", "==", user?.uid)
     );
 
-    const unsubs = onSnapshot(q, (querySnapshot) => {
+    const unsubsUserCheckIn = onSnapshot(q, (querySnapshot) => {
       let arr = [];
 
       querySnapshot.forEach((doc) => {
@@ -48,7 +50,7 @@ const Presence = (props) => {
       where("presence_id", "==", uid)
     );
 
-    const unsubs2 = onSnapshot(q2, (querySnapshot) => {
+    const unsubsPresenceTypes = onSnapshot(q2, (querySnapshot) => {
       let arr = [];
 
       querySnapshot.forEach((doc) => {
@@ -59,8 +61,8 @@ const Presence = (props) => {
     });
 
     return () => {
-      unsubs();
-      unsubs2();
+      unsubsUserCheckIn();
+      unsubsPresenceTypes();
       console.log(`<Presence /> : unmounted ${uid}`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,25 +129,34 @@ const Presence = (props) => {
   };
 
   return (
-    <>
-      <p style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ marginBottom: "2rem" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <span>
-          {presence.message} | {userCheckin ? userCheckin.type : ""}
+          {presence.message} | {users.length} records |{" "}
+          {userCheckin ? userCheckin.type : ""}
         </span>
-        <span>{users.length} records</span>
-      </p>
-      {userCheckin ? (
-        <button onClick={() => checkin("cancel")}>cancel</button>
-      ) : (
-        <>
-          <button onClick={() => checkin("hadir")}>Hadir</button>
-          <button onClick={() => checkin("izin")}>izin</button>
-          <button onClick={() => checkin("sakit")}>sakit</button>
-        </>
-      )}
-
-      {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
-    </>
+        {users.map((user, index) => (
+          <div
+            key={index}
+            style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
+          >
+            <UserData uid={user?.uid} />
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "1rem" }}>
+        {userCheckin ? (
+          <button onClick={() => checkin("cancel")}>cancel</button>
+        ) : (
+          <>
+            <button onClick={() => checkin("hadir")}>Hadir</button>
+            <button onClick={() => checkin("izin")}>izin</button>
+            <button onClick={() => checkin("sakit")}>sakit</button>
+          </>
+        )}
+        {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
+      </div>
+    </div>
   );
 };
 
