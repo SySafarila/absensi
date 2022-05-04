@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import ShowClasses from "../../components/classes/ShowClasses";
+import LoginRequired from "../../components/LoginRequired";
+import UserDetail from "../../components/middlewares/UserDetail";
 import { UserState } from "../../components/RecoilState";
 
 const IndexClass = () => {
@@ -53,12 +55,16 @@ const IndexClass = () => {
 
   return (
     <>
-      <Link href="/classes/create">
-        <a>Create</a>
-      </Link>
-      {classes.map((doc) => (
-        <ShowClasses uid={doc?.class_id} key={doc?.uid} />
-      ))}
+      <LoginRequired>
+        {/* <UserDetail> */}
+          <Link href="/classes/create">
+            <a>Create</a>
+          </Link>
+          {classes.map((doc) => (
+            <ShowClasses uid={doc?.class_id} key={doc?.uid} />
+          ))}
+        {/* </UserDetail> */}
+      </LoginRequired>
     </>
   );
 };

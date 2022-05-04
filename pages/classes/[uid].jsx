@@ -346,7 +346,7 @@ const UserClassCheckMiddleware = (props) => {
       );
 
     default:
-      return <p>Checking...</p>;
+      return "loading";
       break;
   }
 };
