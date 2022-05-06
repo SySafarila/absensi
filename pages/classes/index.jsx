@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import ShowClasses from "../../components/classes/ShowClasses";
 import LoginRequired from "../../components/LoginRequired";
-import UserDetail from "../../components/middlewares/UserDetail";
+// import UserDetail from "../../components/middlewares/UserDetail";
 import { UserState } from "../../components/RecoilState";
 
 const IndexClass = () => {
