@@ -140,7 +140,7 @@ const Presence = (props) => {
             key={index}
             style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
           >
-            <UserData uid={user?.uid} />
+            <UserData uid={user?.user_id} />
           </div>
         ))}
       </div>
