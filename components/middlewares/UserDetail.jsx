@@ -26,16 +26,16 @@ const UserDetail = (props) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log(docSnap.data());
+      // console.log(docSnap.data());
       setUserDetail(docSnap.data());
     } else {
-      console.log("No such document!");
+      // console.log("No such document!");
       setUserDetail(false);
     }
   };
 
   const onSubmit = async (data) => {
-    console.log({ ...data, type: type });
+    // console.log({ ...data, type: type });
     try {
       await setDoc(doc(db, "users", user.uid), { ...data, type: type });
       setUserDetail(data);

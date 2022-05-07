@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 
-const UserData = ({ uid }) => {
+const UserData = ({ uid, created_at }) => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const class_id = router.query.uid;
@@ -24,13 +24,17 @@ const UserData = ({ uid }) => {
 
     if (docSnap.exists()) {
       setUser(docSnap.data());
-      console.log(docSnap.data());
+      // console.log(docSnap.data());
     } else {
       //
     }
   };
 
-  return <>{user?.name ?? uid}</>;
+  return (
+    <>
+      {user?.name ?? ""} | {created_at ?? ""}
+    </>
+  );
 };
 
 export default UserData;

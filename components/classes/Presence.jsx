@@ -6,10 +6,11 @@ import {
   getDocs,
   getFirestore,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
@@ -47,7 +48,8 @@ const Presence = (props) => {
     // get presenceTypes records
     const q2 = query(
       collection(db, "presenceTypes"),
-      where("presence_id", "==", uid)
+      where("presence_id", "==", uid),
+      orderBy("created_at", "asc")
     );
 
     const unsubsPresenceTypes = onSnapshot(q2, (querySnapshot) => {
@@ -140,7 +142,7 @@ const Presence = (props) => {
             key={index}
             style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
           >
-            <UserData uid={user?.user_id} />
+            <UserData uid={user?.user_id} created_at={user?.created_at}/>
           </div>
         ))}
       </div>
