@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+import moment from "moment";
 
 const UserData = ({ uid, created_at }) => {
   const [user, setUser] = useState(null);
@@ -32,9 +33,23 @@ const UserData = ({ uid, created_at }) => {
 
   return (
     <>
-      {user?.name ?? ""} | {created_at ?? ""}
+      {user?.name ?? ""} | <Timer created_at={created_at} />
     </>
   );
+};
+
+const Timer = ({ created_at }) => {
+  const [x, setX] = useState(true);
+
+  useEffect(() => {
+    console.count("timer");
+    const interval = setInterval(() => {
+      setX(!x);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [x]);
+  return <>{created_at ? moment(created_at).fromNow() : created_at}</>;
 };
 
 export default UserData;
