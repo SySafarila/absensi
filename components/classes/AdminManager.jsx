@@ -13,10 +13,13 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
 import { useRouter } from "next/router";
+import UserDataAdmin from "./UserDataAdmin";
 
 const AdminManager = () => {
   const [admins, setAdmins] = useState([]);
+  const [adminsUid, setAdminsUid] = useState([]);
   const [userClasses, setUserClasses] = useState([]);
+
   let user = useRecoilValue(UserState);
   const router = useRouter();
   let class_uid = router.query.uid;
@@ -32,10 +35,16 @@ const AdminManager = () => {
 
     const unsubs = onSnapshot(q, (querySnapshot) => {
       let arr = [];
+      let arrIds = [];
+
       querySnapshot.forEach((data) => {
         arr.push({ ...data.data(), uid: data.id });
+        arrIds.push(data.data().user_id);
       });
       setAdmins(arr);
+      setAdminsUid(arrIds);
+      // console.log("admins ", arr);
+      // console.log("arrIds ", arrIds);
       // console.log("Admins : ", arr);
     });
 
@@ -43,6 +52,8 @@ const AdminManager = () => {
 
     return () => {
       unsubs();
+      setAdmins([]);
+      setAdminsUid([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,6 +76,7 @@ const AdminManager = () => {
 
     return () => {
       unsubs();
+      setUserClasses([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -142,7 +154,8 @@ const AdminManager = () => {
             {admins.map((admin, index) => (
               <li key={index}>
                 <span>
-                  {admin.user_id} {admin.user_id == user.uid ? "- you" : ""}
+                  <UserDataAdmin uid={admin.user_id} />{" "}
+                  {admin.user_id == user.uid ? "- you" : ""}
                 </span>
                 {admin.user_id == user.uid ? (
                   ""
@@ -161,15 +174,20 @@ const AdminManager = () => {
             {userClasses.map((userX, index) => (
               <li key={index}>
                 <span>
-                  {userX.user_id} {userX.user_id == user.uid ? "- you" : ""}
+                  <UserDataAdmin uid={userX.user_id} />{" "}
+                  {userX.user_id == user.uid ? "- you" : ""}
                 </span>
                 {userX.user_id == user.uid ? (
                   ""
                 ) : (
                   <>
-                    <button onClick={() => setAsAdmin(userX.user_id)}>
-                      Set as Admin
-                    </button>
+                    {!adminsUid.includes(userX.user_id) ? (
+                      <button onClick={() => setAsAdmin(userX.user_id)}>
+                        Set as Admin
+                      </button>
+                    ) : (
+                      ""
+                    )}
                     <button onClick={() => deleteUser(userX.user_id)}>
                       Delete
                     </button>
