@@ -141,8 +141,9 @@ const ShowClass = () => {
         await deleteDoc(doc(db, "classes", uid));
 
         deletePresences();
-        deleteClassAdmins();
         deleteUserClasses();
+        deletePresenceTypes();
+        deleteClassAdmins();
 
         alert("class deleted");
       } catch (err) {
@@ -198,6 +199,22 @@ const ShowClass = () => {
 
   const deleteUserClass = async (uid) => {
     await deleteDoc(doc(db, "userClasses", uid));
+  };
+
+  const deletePresenceTypes = async () => {
+    const q = query(
+      collection(db, "presenceTypes"),
+      where("class_id", "==", uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (doc) => {
+      deletePresenceType(doc.id);
+    });
+  };
+
+  const deletePresenceType = async (uid) => {
+    await deleteDoc(doc(db, "presenceTypes", uid));
   };
 
   return (
