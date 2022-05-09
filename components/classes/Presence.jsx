@@ -149,7 +149,11 @@ const Presence = (props) => {
             key={index}
             style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
           >
-            <UserData uid={user?.user_id} created_at={user?.created_at} late={user?.late} />
+            <UserData
+              uid={user?.user_id}
+              created_at={user?.created_at}
+              late={user?.late}
+            />
           </div>
         ))}
       </div>
@@ -179,6 +183,7 @@ const Realtime = ({ time }) => {
     }, 1000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [x]);
 
   // return <>{x.days ? `${x.days} days` : ""} {x.hours ? `${x.hours} hours` : ""} {x.minutes ? `${x.minutes} minutes` : ""} {x.seconds ? `${x.seconds} seconds` : ""}</>;
