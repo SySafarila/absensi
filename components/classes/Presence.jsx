@@ -113,6 +113,7 @@ const Presence = (props) => {
           type: type,
           class_id: presence.class_uid,
           created_at: new Date().getTime(),
+          late: new Date().getTime() > presence.deadline_at ? true : false,
         });
       } else {
         if (type == "cancel") {
@@ -125,6 +126,7 @@ const Presence = (props) => {
           type: type,
           class_id: presence.class_uid,
           created_at: new Date().getTime(),
+          late: new Date().getTime() > presence.deadline_at ? true : false,
         });
       }
     } catch (er) {
@@ -147,7 +149,7 @@ const Presence = (props) => {
             key={index}
             style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
           >
-            <UserData uid={user?.user_id} created_at={user?.created_at} />
+            <UserData uid={user?.user_id} created_at={user?.created_at} late={user?.late} />
           </div>
         ))}
       </div>

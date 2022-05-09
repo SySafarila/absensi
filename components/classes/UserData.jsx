@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import moment from "moment";
 
-const UserData = ({ uid, created_at }) => {
+const UserData = ({ uid, created_at, late }) => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const class_id = router.query.uid;
@@ -33,7 +33,8 @@ const UserData = ({ uid, created_at }) => {
 
   return (
     <>
-      {user?.name ?? ""} | <Timer created_at={created_at} />
+      {user?.name ?? ""} {late ? "| late" : ""} |{" "}
+      <Timer created_at={created_at} />
     </>
   );
 };
