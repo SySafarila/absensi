@@ -137,12 +137,13 @@ const Presence = (props) => {
           {presence.message} | {users.length} records |{" "}
           {userCheckin ? userCheckin.type : ""}
         </span>
+        <span>Deadline : {props?.deadline_at}</span>
         {users.map((user, index) => (
           <div
             key={index}
             style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
           >
-            <UserData uid={user?.user_id} created_at={user?.created_at}/>
+            <UserData uid={user?.user_id} created_at={user?.created_at} />
           </div>
         ))}
       </div>

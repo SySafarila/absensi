@@ -19,6 +19,7 @@ import CreatePresence from "../../components/classes/CreatePresence";
 import Presence from "../../components/classes/Presence";
 import AdminManager from "../../components/classes/AdminManager";
 import LoginRequired from "../../components/LoginRequired";
+import moment from "moment";
 
 const ShowClass = () => {
   const [classExist, setClassExist] = useState(null);
@@ -229,7 +230,7 @@ const ShowClass = () => {
           </IsAdmin>
           <div>
             {presences.map((data, i) => (
-              <Presence presence={data} key={i} isAdmin={isAdmin} />
+              <Presence presence={data} key={i} deadline_at={moment(data.deadline_at).format('HH:mm DD-MM-YYYY')} isAdmin={isAdmin} />
             ))}
           </div>
         </UserClassCheckMiddleware>

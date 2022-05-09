@@ -2,6 +2,7 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 const CreatePresence = () => {
   const {
@@ -20,12 +21,13 @@ const CreatePresence = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    // console.log({ ...data, class_uid });
+    let plusOneHour = moment().add(1, "hours").toISOString();
     try {
       const docRef = await addDoc(collection(db, "presences"), {
         ...data,
         class_uid: uid,
         created_at: new Date().getTime(),
+        deadline_at: new Date(plusOneHour).getTime(),
       });
       reset({
         message: null,
