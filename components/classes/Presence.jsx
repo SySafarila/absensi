@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserState } from "../RecoilState";
 import UserData from "./UserData";
+import moment from "moment";
+import countdown from "../../libs/countdown";
 
 const Presence = (props) => {
   const [userCheckin, setUserCheckoin] = useState(false);
@@ -137,7 +139,9 @@ const Presence = (props) => {
           {presence.message} | {users.length} records |{" "}
           {userCheckin ? userCheckin.type : ""}
         </span>
-        <span>Deadline : {props?.deadline_at}</span>
+        <span>
+          Deadline : <Realtime time={presence.deadline_at} />
+        </span>
         {users.map((user, index) => (
           <div
             key={index}
@@ -161,6 +165,27 @@ const Presence = (props) => {
       </div>
     </div>
   );
+};
+
+const Realtime = ({ time }) => {
+  const [x, setX] = useState(null);
+  // const cd = countdown(time);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // console.log(countdown(time));
+      setX(countdown(time));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [x]);
+
+  // return <>{x.days ? `${x.days} days` : ""} {x.hours ? `${x.hours} hours` : ""} {x.minutes ? `${x.minutes} minutes` : ""} {x.seconds ? `${x.seconds} seconds` : ""}</>;
+  return (
+    <span style={{ color: x ? (x.value >= 0 ? "red" : "") : "" }}>
+      {x ? (x.value >= 0 ? "late" : x.toString()) : time}
+    </span>
+  );
+  // return x ? x.toString() : null;
 };
 
 export default Presence;

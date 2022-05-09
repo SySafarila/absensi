@@ -39,7 +39,7 @@ const CreatePresence = () => {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: "1rem" }}>
       <p>You can create presence for {uid} / this class</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <textarea

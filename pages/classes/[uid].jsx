@@ -230,7 +230,7 @@ const ShowClass = () => {
           </IsAdmin>
           <div>
             {presences.map((data, i) => (
-              <Presence presence={data} key={i} deadline_at={moment(data.deadline_at).format('HH:mm DD-MM-YYYY')} isAdmin={isAdmin} />
+              <Presence presence={data} key={i} isAdmin={isAdmin} />
             ))}
           </div>
         </UserClassCheckMiddleware>

@@ -42,7 +42,7 @@ const Timer = ({ created_at }) => {
   const [x, setX] = useState(true);
 
   useEffect(() => {
-    console.count("timer");
+    // console.count("timer");
     const interval = setInterval(() => {
       setX(!x);
     }, 1000);
