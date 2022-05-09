@@ -62,6 +62,7 @@ const Presence = (props) => {
       });
 
       setUsers(arr);
+      console.log(arr);
     });
 
     return () => {
@@ -138,8 +139,8 @@ const Presence = (props) => {
     <div style={{ marginBottom: "2rem" }}>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <span>
-          {presence.message} | {users.length} records |{" "}
-          {userCheckin ? userCheckin.type : ""}
+          {presence.message} | {users.length} records
+          {/* {userCheckin ? userCheckin.type : ""} */}
         </span>
         <span>
           Deadline : <Realtime time={presence.deadline_at} />
@@ -153,6 +154,7 @@ const Presence = (props) => {
               uid={user?.user_id}
               created_at={user?.created_at}
               late={user?.late}
+              type={user?.type}
             />
           </div>
         ))}
