@@ -39,21 +39,19 @@ const CreatePresence = () => {
   };
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <p>You can create presence for {uid} / this class</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    // <div style={{ marginBottom: "1rem" }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-2 mb-5 text-gray-700">
+        <label htmlFor="message" className="font-semibold">Send a presences with your messege below</label>
         <textarea
           name="message"
           id="message"
-          cols="30"
-          rows="2"
           placeholder="message"
           {...register("message", { required: true })}
+          className="focus:outline-none focus:border-2 p-2 border w-full rounded-md max-h-[5rem] min-h-[4rem]"
         ></textarea>
-        <br />
-        <button type="submit">Post</button>
+        <button type="submit" className="border rounded-md px-5 py-1.5 bg-white hover:bg-gray-100 w-fit">Post</button>
       </form>
-    </div>
+    // </div>
   );
 };
 

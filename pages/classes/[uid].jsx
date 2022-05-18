@@ -20,6 +20,7 @@ import Presence from "../../components/classes/Presence";
 import AdminManager from "../../components/classes/AdminManager";
 import LoginRequired from "../../components/LoginRequired";
 import moment from "moment";
+import Main from "../../components/layouts/Main";
 
 const ShowClass = () => {
   const [classExist, setClassExist] = useState(null);
@@ -237,18 +238,20 @@ const ShowClass = () => {
     <>
       <LoginRequired>
         <UserClassCheckMiddleware>
-          <button onClick={leaveClass}>Leave</button>
-          <IsAdmin>
-            <span>You are admin for this class </span>
-            <button onClick={deleteClass}>Delete this class</button>
-            <AdminManager />
-            <CreatePresence />
-          </IsAdmin>
-          <div>
-            {presences.map((data, i) => (
-              <Presence presence={data} key={i} isAdmin={isAdmin} />
-            ))}
-          </div>
+          <Main class_name="a" leave={leaveClass} deleteClass={deleteClass} isAdmin={isAdmin}>
+            {/* <button onClick={leaveClass}>Leave</button> */}
+            <IsAdmin>
+              {/* <span>You are admin for this class </span> */}
+              {/* <button onClick={deleteClass}>Delete this class</button> */}
+              <AdminManager />
+              <CreatePresence />
+            </IsAdmin>
+            <div className="flex flex-col gap-y-5">
+              {presences.map((data, i) => (
+                <Presence presence={data} key={i} isAdmin={isAdmin} />
+              ))}
+            </div>
+          </Main>
         </UserClassCheckMiddleware>
       </LoginRequired>
     </>

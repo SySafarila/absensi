@@ -136,20 +136,66 @@ const Presence = (props) => {
   };
 
   return (
-    <div style={{ marginBottom: "2rem" }}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <span>
-          {presence.message} | {users.length} records
-          {/* {userCheckin ? userCheckin.type : ""} */}
-        </span>
-        <span>
-          Deadline : <Realtime time={presence.deadline_at} />
-        </span>
-        {users.map((user, index) => (
-          <div
-            key={index}
-            style={{ borderLeft: "2px solid #00c900", paddingLeft: "4px" }}
+    <div className="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+      <span className="text-[10px]">
+        {presence.created_at ? moment(presence.created_at).fromNow() : ""}
+      </span>
+      <p className="mb-1">{presence.message}</p>
+      {/* <div style={{ marginTop: "1rem" }}> */}
+      <div className="flex gap-1">
+        {userCheckin ? (
+          <button
+            onClick={() => checkin("cancel")}
+            className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border"
           >
+            cancel
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={() => checkin("hadir")}
+              className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border"
+            >
+              Hadir
+            </button>
+            <button
+              onClick={() => checkin("izin")}
+              className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border"
+            >
+              izin
+            </button>
+            <button
+              onClick={() => checkin("sakit")}
+              className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border"
+            >
+              sakit
+            </button>
+          </>
+        )}
+        {props.isAdmin ? (
+          <button
+            onClick={deletePresence}
+            className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border border-red-600"
+          >
+            hapus
+          </button>
+        ) : null}
+        <span className="text-gray-300">|</span>
+        <span className="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">
+          Deadline in : <Realtime time={presence.deadline_at} />
+        </span>
+      </div>
+      {/* </div> */}
+      {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
+      {/* <span>
+          {presence.message} | {users.length} records
+        </span> */}
+      {/* <span>
+          Deadline : <Realtime time={presence.deadline_at} />
+        </span> */}
+      <div className="mt-2 flex flex-col gap-y-2">
+        {users.map((user, index) => (
+          <div key={index} className="flex flex-col border-b pb-2">
             <UserData
               uid={user?.user_id}
               created_at={user?.created_at}
@@ -159,18 +205,10 @@ const Presence = (props) => {
           </div>
         ))}
       </div>
-      <div style={{ marginTop: "1rem" }}>
-        {userCheckin ? (
-          <button onClick={() => checkin("cancel")}>cancel</button>
-        ) : (
-          <>
-            <button onClick={() => checkin("hadir")}>Hadir</button>
-            <button onClick={() => checkin("izin")}>izin</button>
-            <button onClick={() => checkin("sakit")}>sakit</button>
-          </>
-        )}
-        {props.isAdmin ? <button onClick={deletePresence}>hapus</button> : null}
-      </div>
+      <button className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">
+        Show Record (4)
+      </button>
+      {/* </div> */}
     </div>
   );
 };
@@ -191,7 +229,7 @@ const Realtime = ({ time }) => {
   // return <>{x.days ? `${x.days} days` : ""} {x.hours ? `${x.hours} hours` : ""} {x.minutes ? `${x.minutes} minutes` : ""} {x.seconds ? `${x.seconds} seconds` : ""}</>;
   return (
     <span style={{ color: x ? (x.value >= 0 ? "red" : "") : "" }}>
-      {x ? (x.value >= 0 ? "late" : x.toString()) : time}
+      {x ? (x.value >= 0 ? "late" : x.toString()) : ""}
     </span>
   );
   // return x ? x.toString() : null;
