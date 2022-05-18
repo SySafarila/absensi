@@ -218,10 +218,26 @@ const ShowClass = () => {
     await deleteDoc(doc(db, "presenceTypes", uid));
   };
 
+  const leaveClass = async () => {
+    const q = query(
+      collection(db, "userClasses"),
+      where("class_id", "==", uid),
+      where("user_id", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    let id;
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+    });
+    await deleteDoc(doc(db, "userClasses", id));
+  };
+
   return (
     <>
       <LoginRequired>
         <UserClassCheckMiddleware>
+          <button onClick={leaveClass}>Leave</button>
           <IsAdmin>
             <span>You are admin for this class </span>
             <button onClick={deleteClass}>Delete this class</button>
