@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="bg-gray-100 min-h-screen py-5">
+        <div class="max-w-screen-sm mx-auto bg-white min-h-[calc(100vh-2.5rem)] p-10 rounded-xl overflow-clip">
+          <nav class="flex justify-center items-center border-b-2 py-4 -mx-10 -mt-10">
+            <a href="#">Logo</a>
+            <span class="mx-2">/</span>
+            <a href="#">[CLASS NAME]</a>
+            <span class="mx-2">-</span>
+            <button class="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded-md text-sm">Leave</button>
+            <button class="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded-md text-sm ml-2">Delete Class</button>
+          </nav>
+          <div class="py-5">
+            <form action="#" class="flex flex-col gap-y-2 mb-5 text-gray-700">
+              <label for="message" class="font-semibold">Send a presences with your messege below</label>
+              <textarea name="message" id="message" class="focus:outline-none focus:border-2 p-2 border w-full rounded-md max-h-[5rem] min-h-[4rem]"></textarea>
+              <button class="border rounded-md px-5 py-1.5 bg-white hover:bg-gray-100 w-fit">Post</button>
+            </form>
+            <!-- presences : start -->
+            <div class="flex flex-col gap-y-5">
+              <div class="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+                <span class="text-[10px]">5 minutes ago</span>
+                <p class="mb-1">Absensi hari ini yagesya</p>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Cancel</span>
+                <span class="text-gray-300">|</span>
+                <span class="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">Deadline in : 30 minutes</span>
+                <div class="mt-2 flex flex-col gap-y-2">
+                  <div class="flex flex-col border-b pb-2">
+                    <span>Syahrul Safarila</span>
+                    <div class="text-[12px]">
+                      <span>Hadir</span>
+                      <span>|</span>
+                      <span>4 minutes ago</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-col border-b pb-2">
+                    <span>Syahrul Safarila</span>
+                    <div class="text-[12px]">
+                      <span>Hadir</span>
+                      <span>|</span>
+                      <span>4 minutes ago</span>
+                    </div>
+                  </div>
+                </div>
+                <button class="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">Show Record (4)</button>
+              </div>
+              <div class="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+                <span class="text-[10px]">6 minutes ago</span>
+                <p class="mb-1">Absensi hari ini yagesya</p>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Hadir</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Sakit</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Izin</span>
+                <span class="text-gray-300">|</span>
+                <span class="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">Deadline in : 30 minutes</span>
+                <button class="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">Show Record</button>
+              </div>
+              <div class="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+                <span class="text-[10px]">6 minutes ago</span>
+                <p class="mb-1">Absensi hari ini yagesya</p>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Hadir</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Sakit</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Izin</span>
+                <span class="text-gray-300">|</span>
+                <span class="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">Deadline in : 30 minutes</span>
+                <button class="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">Show Record</button>
+              </div>
+              <div class="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+                <span class="text-[10px]">6 minutes ago</span>
+                <p class="mb-1">Absensi hari ini yagesya</p>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Hadir</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Sakit</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Izin</span>
+                <span class="text-gray-300">|</span>
+                <span class="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">Deadline in : 30 minutes</span>
+                <button class="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">Show Record</button>
+              </div>
+              <div class="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+                <span class="text-[10px]">6 minutes ago</span>
+                <p class="mb-1">Absensi hari ini yagesya</p>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Hadir</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Sakit</span>
+                <span class="text-[10px] bg-gray-100 px-2 py-1 rounded-full border">Izin</span>
+                <span class="text-gray-300">|</span>
+                <span class="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">Deadline in : 30 minutes</span>
+                <button class="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">Show Record</button>
+              </div>
+            </div>
+            <!-- presences : end -->
+          </div>
+        </div>
+      </div>
+</body>
+</html>
