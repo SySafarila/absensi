@@ -19,6 +19,7 @@ const AdminManager = () => {
   const [admins, setAdmins] = useState([]);
   const [adminsUid, setAdminsUid] = useState([]);
   const [userClasses, setUserClasses] = useState([]);
+  const [show, setShow] = useState(false);
 
   let user = useRecoilValue(UserState);
   const router = useRouter();
@@ -144,62 +145,80 @@ const AdminManager = () => {
     }
   };
 
-  return (
-    <div style={{ background: "#e9e9e9" }}>
-      <p>Admin Manager</p>
-      <ul>
-        <li>
-          <span>Admin</span>
-          <ul>
+  if (show) {
+    return (
+      <>
+        <p className="font-semibold">Admin Manager</p>
+        <div className="py-2">
+          <div className="flex gap-2 text-gray-700">
+            <span>Admin :</span>
             {admins.map((admin, index) => (
-              <li key={index}>
-                <span>
-                  <UserDataAdmin uid={admin.user_id} />{" "}
-                  {admin.user_id == user.uid ? "- you" : ""}
-                </span>
+              <span className="bg-gray-200 px-2 py-0.5 rounded-md" key={index}>
+                <UserDataAdmin uid={admin.user_id} />{" "}
+                {admin.user_id == user.uid ? "- you" : ""}
                 {admin.user_id == user.uid ? (
                   ""
                 ) : (
-                  <button onClick={() => deleteAdmin(admin.user_id)}>
-                    Delete
+                  <button
+                    onClick={() => deleteAdmin(admin.user_id)}
+                    className="text-sm"
+                  >
+                    (X)
                   </button>
                 )}
-              </li>
+              </span>
             ))}
-          </ul>
-        </li>
-        <li>
-          <span>Users</span>
-          <ul>
+          </div>
+          <div className="flex gap-2 text-gray-700 mt-2">
+            <span>Users :</span>
             {userClasses.map((userX, index) => (
-              <li key={index}>
-                <span>
-                  <UserDataAdmin uid={userX.user_id} />{" "}
-                  {userX.user_id == user.uid ? "- you" : ""}
-                </span>
+              <span className="bg-gray-200 px-2 py-0.5 rounded-md" key={index}>
+                <UserDataAdmin uid={userX.user_id} />{" "}
+                {userX.user_id == user.uid ? "- you" : ""}
                 {userX.user_id == user.uid ? (
                   ""
                 ) : (
                   <>
                     {!adminsUid.includes(userX.user_id) ? (
-                      <button onClick={() => setAsAdmin(userX.user_id)}>
-                        Set as Admin
+                      <button
+                        onClick={() => setAsAdmin(userX.user_id)}
+                        className="text-sm"
+                      >
+                        (Set as Admin)
                       </button>
                     ) : (
                       ""
                     )}
-                    <button onClick={() => deleteUser(userX.user_id)}>
-                      Delete
+                    <button
+                      onClick={() => deleteUser(userX.user_id)}
+                      className="text-sm"
+                    >
+                      (X)
                     </button>
                   </>
                 )}
-              </li>
+              </span>
             ))}
-          </ul>
-        </li>
-      </ul>
-    </div>
-  );
+          </div>
+        </div>
+        <button
+          onClick={() => setShow(false)}
+          className="w-full bg-gray-100 border rounded-md py-1 text-sm text-gray-700 mb-2"
+        >
+          Hide Admin Panel
+        </button>
+      </>
+    );
+  } else {
+    return (
+      <button
+        onClick={() => setShow(true)}
+        className="w-full bg-gray-100 border rounded-md py-1 text-sm text-gray-700 mb-2"
+      >
+        Show Admin Panel
+      </button>
+    );
+  }
 };
 
 export default AdminManager;
