@@ -238,11 +238,13 @@ const ShowClass = () => {
     <>
       <LoginRequired>
         <UserClassCheckMiddleware>
-          <Main class_name="a" leave={leaveClass} deleteClass={deleteClass} isAdmin={isAdmin}>
-            {/* <button onClick={leaveClass}>Leave</button> */}
+          <Main
+            class_name={classExist?.name ?? ""}
+            leave={leaveClass}
+            deleteClass={deleteClass}
+            isAdmin={isAdmin}
+          >
             <IsAdmin>
-              {/* <span>You are admin for this class </span> */}
-              {/* <button onClick={deleteClass}>Delete this class</button> */}
               <AdminManager />
               <CreatePresence />
             </IsAdmin>

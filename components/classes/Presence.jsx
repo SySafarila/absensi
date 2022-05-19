@@ -21,6 +21,7 @@ import countdown from "../../libs/countdown";
 const Presence = (props) => {
   const [userCheckin, setUserCheckoin] = useState(false);
   const [users, setUsers] = useState([]);
+  const [showUsers, setShowUsers] = useState(false);
 
   const db = getFirestore();
   const user = useRecoilValue(UserState);
@@ -69,6 +70,7 @@ const Presence = (props) => {
       unsubsUserCheckIn();
       unsubsPresenceTypes();
       console.log(`<Presence /> : unmounted ${uid}`);
+      setShowUsers(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
@@ -141,7 +143,6 @@ const Presence = (props) => {
         {presence.created_at ? moment(presence.created_at).fromNow() : ""}
       </span>
       <p className="mb-1">{presence.message}</p>
-      {/* <div style={{ marginTop: "1rem" }}> */}
       <div className="flex gap-1">
         {userCheckin ? (
           <button
@@ -185,30 +186,35 @@ const Presence = (props) => {
           Deadline in : <Realtime time={presence.deadline_at} />
         </span>
       </div>
-      {/* </div> */}
-      {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
-      {/* <span>
-          {presence.message} | {users.length} records
-        </span> */}
-      {/* <span>
-          Deadline : <Realtime time={presence.deadline_at} />
-        </span> */}
-      <div className="mt-2 flex flex-col gap-y-2">
-        {users.map((user, index) => (
-          <div key={index} className="flex flex-col border-b pb-2">
-            <UserData
-              uid={user?.user_id}
-              created_at={user?.created_at}
-              late={user?.late}
-              type={user?.type}
-            />
-          </div>
-        ))}
-      </div>
-      <button className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1">
-        Show Record (4)
-      </button>
-      {/* </div> */}
+      {showUsers ? (
+        <div className="mt-2 flex flex-col gap-y-2">
+          {users.map((user, index) => (
+            <div key={index} className="flex flex-col border-b pb-2">
+              <UserData
+                uid={user?.user_id}
+                created_at={user?.created_at}
+                late={user?.late}
+                type={user?.type}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {showUsers ? (
+        <button
+          onClick={() => setShowUsers(false)}
+          className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+        >
+          Close Record
+        </button>
+      ) : (
+        <button
+          onClick={() => setShowUsers(true)}
+          className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+        >
+          Show Record
+        </button>
+      )}
     </div>
   );
 };

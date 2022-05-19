@@ -15,7 +15,7 @@ const Main = ({ children, class_name, leave, deleteClass, isAdmin }) => {
           </button>
           {isAdmin ? (
             <button
-              onCanPlay={deleteClass}
+              onClick={deleteClass}
               className="bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded-md text-sm ml-2"
             >
               Delete Class
