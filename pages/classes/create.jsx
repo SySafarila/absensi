@@ -47,7 +47,10 @@ const CreateClass = () => {
   return (
     <>
       <LoginRequired>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex justify-center h-screen items-center bg-gray-100 flex-col gap-2"
+        >
           <input
             type="text"
             name="name"
@@ -56,6 +59,7 @@ const CreateClass = () => {
               required: true,
             })}
             placeholder="name"
+            className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
             type="text"
@@ -65,6 +69,7 @@ const CreateClass = () => {
               required: true,
             })}
             placeholder="university"
+            className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
             type="text"
@@ -74,6 +79,7 @@ const CreateClass = () => {
               required: true,
             })}
             placeholder="semester"
+            className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
             type="text"
@@ -83,6 +89,7 @@ const CreateClass = () => {
               required: true,
             })}
             placeholder="lecturer"
+            className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
             type="text"
@@ -92,8 +99,14 @@ const CreateClass = () => {
               required: true,
             })}
             placeholder="course"
+            className="w-[15rem] py-2 px-3 border rounded-md"
           />
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="bg-white w-[15rem] border py-2 px-4 rounded-md hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-semibold"
+          >
+            Submit
+          </button>
         </form>
       </LoginRequired>
     </>

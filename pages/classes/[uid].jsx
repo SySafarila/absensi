@@ -19,7 +19,7 @@ import CreatePresence from "../../components/classes/CreatePresence";
 import Presence from "../../components/classes/Presence";
 import AdminManager from "../../components/classes/AdminManager";
 import LoginRequired from "../../components/LoginRequired";
-import moment from "moment";
+// import moment from "moment";
 import Main from "../../components/layouts/Main";
 
 const ShowClass = () => {
