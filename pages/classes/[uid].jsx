@@ -21,6 +21,7 @@ import AdminManager from "../../components/classes/AdminManager";
 import LoginRequired from "../../components/LoginRequired";
 // import moment from "moment";
 import Main from "../../components/layouts/Main";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const ShowClass = () => {
   const [classExist, setClassExist] = useState(null);
@@ -385,7 +386,7 @@ const UserClassCheckMiddleware = (props) => {
       );
 
     default:
-      return "loading";
+      return <LoadingScreen />;
       break;
   }
 };

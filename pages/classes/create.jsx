@@ -58,7 +58,7 @@ const CreateClass = () => {
             {...register("name", {
               required: true,
             })}
-            placeholder="name"
+            placeholder="Name"
             className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
@@ -68,7 +68,7 @@ const CreateClass = () => {
             {...register("university", {
               required: true,
             })}
-            placeholder="university"
+            placeholder="University"
             className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
@@ -78,7 +78,7 @@ const CreateClass = () => {
             {...register("semester", {
               required: true,
             })}
-            placeholder="semester"
+            placeholder="Semester"
             className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
@@ -88,7 +88,7 @@ const CreateClass = () => {
             {...register("lecturer", {
               required: true,
             })}
-            placeholder="lecturer"
+            placeholder="Lecturer"
             className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <input
@@ -98,7 +98,7 @@ const CreateClass = () => {
             {...register("course", {
               required: true,
             })}
-            placeholder="course"
+            placeholder="Course"
             className="w-[15rem] py-2 px-3 border rounded-md"
           />
           <button

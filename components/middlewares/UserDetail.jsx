@@ -3,6 +3,7 @@ import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { UserState, UserDetail as UserDetailState } from "../RecoilState";
 import { useForm } from "react-hook-form";
+import LoadingScreen from "../LoadingScreen";
 
 const UserDetail = (props) => {
   const db = getFirestore();
@@ -105,7 +106,7 @@ const UserDetail = (props) => {
   };
 
   if (userDetail == null) {
-    return "loading";
+    return <LoadingScreen />;
   } else if (userDetail == false) {
     return (
       <>
