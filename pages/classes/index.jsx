@@ -73,7 +73,13 @@ const IndexClass = () => {
               {classes.map((doc) => (
                 <ShowClasses uid={doc?.class_id} key={doc?.uid} />
               ))}
-              {classes.length == 0 ? <p>Empty</p> : null}
+              {classes.length == 0 ? (
+                <Link href="/classes/create">
+                  <a className="bg-white w-fit border py-2 px-4 rounded-md hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-semibold">
+                    Create Class
+                  </a>
+                </Link>
+              ) : null}
             </div>
           </div>
         </div>
