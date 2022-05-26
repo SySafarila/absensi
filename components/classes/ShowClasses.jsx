@@ -36,14 +36,15 @@ const ShowClasses = (props) => {
   return (
     <>
       <ClassExist>
-        <div style={{ borderBottom: "1px solid black" }}>
-          <p>uid : {classX.uid}</p>
-          <p>name : {classX.name}</p>
-          <p>course : {classX.course}</p>
-          <p>university : {classX.university}</p>
-          <p>semester : {classX.semester}</p>
+        <div className="flex flex-col border bg-white p-3 rounded-md">
+          <span>Name : {classX.name}</span>
+          <span>Course : {classX.course}</span>
+          <span>University : {classX.university}</span>
+          <span>Semester : {classX.name}semester</span>
           <Link href={`/classes/${classX.uid}`}>
-            <a className="asd">Get In</a>
+            <a className="bg-gray-200 hover:bg-gray-300 active:bg-gray-400 px-2 py-1 mt-2 w-fit">
+              Get In
+            </a>
           </Link>
         </div>
       </ClassExist>

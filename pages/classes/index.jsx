@@ -57,13 +57,26 @@ const IndexClass = () => {
     <>
       <LoginRequired>
         {/* <UserDetail> */}
-          <Link href="/classes/create">
-            <a>Create</a>
-          </Link>
-          {classes.map((doc) => (
-            <ShowClasses uid={doc?.class_id} key={doc?.uid} />
-          ))}
+        {/* <Link href="/classes/create">
+          <a>Create</a>
+        </Link> */}
+
         {/* </UserDetail> */}
+        <div className="bg-gray-100 min-h-screen py-5">
+          <div className="max-w-screen-sm mx-auto bg-white min-h-[calc(100vh-2.5rem)] p-10 rounded-xl overflow-clip">
+            <nav className="flex justify-center items-center border-b-2 py-4 -mx-10 -mt-10">
+              <Link href="/">
+                <a>Logo</a>
+              </Link>
+            </nav>
+            <div className="py-5 flex flex-col gap-3">
+              {classes.map((doc) => (
+                <ShowClasses uid={doc?.class_id} key={doc?.uid} />
+              ))}
+              {classes.length == 0 ? <p>Empty</p> : null}
+            </div>
+          </div>
+        </div>
       </LoginRequired>
     </>
   );

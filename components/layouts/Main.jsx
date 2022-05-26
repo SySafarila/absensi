@@ -1,11 +1,15 @@
+import Link from "next/link";
+
 const Main = ({ children, class_name, leave, deleteClass, isAdmin }) => {
   return (
     <div className="bg-gray-100 min-h-screen py-5">
       <div className="max-w-screen-sm mx-auto bg-white min-h-[calc(100vh-2.5rem)] p-10 rounded-xl overflow-clip">
         <nav className="flex justify-center items-center border-b-2 py-4 -mx-10 -mt-10">
-          <a href="#">Logo</a>
+          <Link href="/">
+            <a>Logo</a>
+          </Link>
           <span className="mx-2">/</span>
-          <a href="#">{class_name ?? "[CLASS NAME]"}</a>
+          <span>{class_name ?? "[CLASS NAME]"}</span>
           <span className="mx-2">-</span>
           <button
             onClick={leave}
