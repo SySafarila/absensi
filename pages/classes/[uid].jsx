@@ -379,9 +379,20 @@ const UserClassCheckMiddleware = (props) => {
 
     case false:
       return (
-        <div>
-          <p>you want to join this class ?</p>
-          <button onClick={joinClass}>Join</button>
+        <div className="flex justify-center h-screen items-center bg-gray-100 flex-col gap-2">
+          <p className="text-center">You want to join this class ?</p>
+          <button
+            className="bg-white w-[10rem] border py-2 px-4 rounded-md hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-semibold"
+            onClick={joinClass}
+          >
+            Join
+          </button>
+          <button
+            className="bg-white w-[10rem] border py-2 px-4 rounded-md hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-semibold"
+            onClick={() => router.push("/")}
+          >
+            No
+          </button>
         </div>
       );
 
