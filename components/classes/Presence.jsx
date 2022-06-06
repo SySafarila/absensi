@@ -182,7 +182,9 @@ const Presence = (props) => {
             hapus
           </button>
         ) : null}
-        <span className="text-gray-300">|</span>
+        {userDetail.type == "mahasiswa" ? (
+          <span className="text-gray-300 leading-[21px]">|</span>
+        ) : null}
         <span className="text-[10px] bg-gray-100 border px-2 py-1 rounded-full">
           Deadline in : <Realtime time={presence.deadline_at} />
         </span>
