@@ -13,7 +13,7 @@ import {
 // import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { UserState } from "../RecoilState";
+import { UserState, UserDetail } from "../RecoilState";
 import UserData from "./UserData";
 import moment from "moment";
 import countdown from "../../libs/countdown";
@@ -25,6 +25,7 @@ const Presence = (props) => {
 
   const db = getFirestore();
   const user = useRecoilValue(UserState);
+  const userDetail = useRecoilValue(UserDetail);
   let presence = props.presence;
   let { uid } = presence;
 
@@ -151,7 +152,7 @@ const Presence = (props) => {
           >
             cancel
           </button>
-        ) : (
+        ) : userDetail.type == "mahasiswa" ? (
           <>
             <button
               onClick={() => checkin("hadir")}
@@ -172,7 +173,7 @@ const Presence = (props) => {
               sakit
             </button>
           </>
-        )}
+        ) : null}
         {props.isAdmin ? (
           <button
             onClick={deletePresence}
