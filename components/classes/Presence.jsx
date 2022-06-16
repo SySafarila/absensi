@@ -9,6 +9,7 @@ import {
   orderBy,
   query,
   where,
+  getDoc,
 } from "firebase/firestore";
 // import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -17,11 +18,15 @@ import { UserState, UserDetail } from "../RecoilState";
 import UserData from "./UserData";
 import moment from "moment";
 import countdown from "../../libs/countdown";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Script from "next/script";
 
 const Presence = (props) => {
   const [userCheckin, setUserCheckoin] = useState(false);
   const [users, setUsers] = useState([]);
   const [showUsers, setShowUsers] = useState(false);
+  const [jquery, setJquery] = useState(false);
 
   const db = getFirestore();
   const user = useRecoilValue(UserState);
@@ -138,8 +143,23 @@ const Presence = (props) => {
     }
   };
 
+  const printTable = (table_id) => {
+    var divToPrint = document.getElementById(table_id);
+    let newWin = window.open("");
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.print();
+    newWin.close();
+  };
+
   return (
     <div className="border p-2 pb-3 pt-0 rounded-md text-gray-700">
+      {/* <Head> */}
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css"
+      />
+      {/* </Head> */}
       <span className="text-[10px]">
         {presence.created_at ? moment(presence.created_at).fromNow() : ""}
       </span>
@@ -204,21 +224,96 @@ const Presence = (props) => {
         </div>
       ) : null}
       {showUsers ? (
-        <button
-          onClick={() => setShowUsers(false)}
-          className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
-        >
-          Close Record
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowUsers(false)}
+            className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+          >
+            Close Record
+          </button>
+          <button
+            onClick={() => printTable(`table-${presence.uid}`)}
+            className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+          >
+            Print
+          </button>
+        </div>
       ) : (
-        <button
-          onClick={() => setShowUsers(true)}
-          className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
-        >
-          Show Record
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowUsers(true)}
+            className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+          >
+            Show Record
+          </button>
+          <button
+            onClick={() => printTable(`table-${presence.uid}`)}
+            className="block bg-gray-100 border w-full mt-3 rounded-md hover:bg-gray-200 text-sm py-1"
+          >
+            Print
+          </button>
+        </div>
       )}
+      {/* onClick={() => printTable(`table-${presence.uid}`)} */}
+      <table
+        border="1"
+        className="w-full border hidden"
+        id={`table-${presence.uid}`}
+      >
+        <thead>
+          <tr>
+            <th className="border">Nama</th>
+            <th className="border">Status</th>
+            <th className="border">Telat</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user, index) => (
+            <tr key={index}>
+              <UserTr uid={user.user_id} late={user?.late} type={user?.type} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  );
+};
+
+const UserTr = ({ uid, created_at, late, type }) => {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+  const class_id = router.query.uid;
+  const db = getFirestore();
+
+  useEffect(() => {
+    console.count(`user ${uid} from ${class_id} presence`);
+    getUser();
+
+    return () => {
+      setUser(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uid]);
+
+  const getUser = async () => {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setUser(docSnap.data());
+      // console.log(docSnap.data());
+    } else {
+      //
+    }
+  };
+
+  return (
+    <>
+      {/* <span>{user?.name ?? ""}</span> */}
+      <td className="border capitalize">{user?.name ?? ""}</td>
+      <td className="border uppercase">{type}</td>
+      <td className="border">{late ? "YA" : ""}</td>
+    </>
   );
 };
 

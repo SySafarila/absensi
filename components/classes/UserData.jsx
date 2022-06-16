@@ -37,7 +37,17 @@ const UserData = ({ uid, created_at, late, type }) => {
       <div className="text-[12px] flex gap-1">
         <span className="capitalize">{type ?? ""}</span>
         <span>|</span>
-        <span><Timer created_at={created_at} /></span>
+        <span>
+          <Timer created_at={created_at} />
+        </span>
+        {late ? (
+          <>
+            <span>|</span>
+            <span className="text-red-600">LATE</span>
+          </>
+        ) : (
+          ""
+        )}
       </div>
       {/* {user?.name ?? ""} | {type ?? ""} {late ? "| late" : ""} |{" "}
       <Timer created_at={created_at} /> */}
