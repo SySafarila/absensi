@@ -194,7 +194,15 @@ const Presence = (props) => {
             </button>
           </>
         ) : null}
-        {props.isAdmin ? (
+        {/* {props.isAdmin ? (
+          <button
+            onClick={deletePresence}
+            className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border border-red-600"
+          >
+            hapus
+          </button>
+        ) : null} */}
+        {userDetail.type != 'mahasiswa' ? (
           <button
             onClick={deletePresence}
             className="text-[10px] bg-gray-100 px-2 py-1 rounded-full border border-red-600"
